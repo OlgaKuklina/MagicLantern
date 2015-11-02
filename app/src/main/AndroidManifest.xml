@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.android.magiclantern">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.PopularMoviesSettingsActivity"
+            android:label="@string/title_popular_movies_settings_activity"
+            android:parentActivityName=".activities.PopularMoviesUniversalActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.magiclantern.activities.PopularMoviesUniversalActivity" />
+        </activity>
+
+        <provider
+            android:name=".data.FavoriteMovieCollectionProvider"
+            android:authorities="com.example.popularmovies.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
+
+        <activity
+            android:name=".activities.PopularMoviesUniversalActivity"
+            android:label="@string/title_activity_popular_movies_universal"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.DetailsViewUniversalActivity"
+            android:label="@string/title_activity_details_view_universal"
+            android:parentActivityName=".activities.PopularMoviesUniversalActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.magiclantern.activities.PopularMoviesUniversalActivity" />
+        </activity>
+    </application>
+
+</manifest>

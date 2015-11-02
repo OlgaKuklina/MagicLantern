@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFAB40</color>
+    <color name="colorPrimaryDark">#0097A7</color>
+    <color name="colorAccent">#FFF3E0</color>
+    <color name="textcolorPrimary">#3E2723</color>
+    <color name="textcolorSec">#F57F17</color>
+
+
+    <color name="detail_view_title_background_color">#FF00656D</color>
+    <color name= "detail_view_background_color">#FFFFFFFF</color>
+    <color name= "detail_view_text_color">#FFFFFFFF</color>
+    <color name= "detail_view_vote_average_text_color">#FF000000</color>
+    <color name= "detail_view_movie_details_text_color">#FF828687</color>
+    <color name= "main_view_background_color">#FFC8FFD7</color>
+    <color name="main_activity_button_text_color">#FFFFFFFF</color>
+    <color name="main_activity_button_background_color">#FFFFA52D</color>
+    <color name="main_activity_button_capstone_background_color">#FFFF3255</color>
+
+    <color name= "detail_view_review_author_text_color">#FF000000</color>
+    <color name= "detail_view_star_button_color">#FF3FF7FF</color>
+</resources>
