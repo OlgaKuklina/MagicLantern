@@ -105,7 +105,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             fetchMovieData(intent.getIntExtra(Intent.EXTRA_TEXT, -1));
         }
         Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_NAME_MOVIE_ID}, null, null, null);
-        if (cursor.getCount() != 0) {
+        if (cursor != null && cursor.getCount() != 0) {
             deleteFromFavButton.setVisibility(View.VISIBLE);
         } else {
             markAsFavButton.setVisibility(View.VISIBLE);
