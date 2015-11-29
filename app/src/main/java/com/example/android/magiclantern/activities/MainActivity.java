@@ -94,22 +94,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Intent intent = new Intent(MainActivity.this, PopularMoviesUniversalActivity.class);
+        if (id == R.id.now_playing) {
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.top_rated) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
             String sortOrderUpdate;
             sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
             SharedPreferences.Editor e = prefs.edit();
-            e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
+            e.putString("pref_sorting", "vote_average.desc"); // save "value" to the SharedPreferences
             e.commit();
             Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
             intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
 
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.popular) {
 
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
             String sortOrderUpdate;
@@ -122,7 +122,18 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
 
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.favorites) {
+            SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+            String sortOrderUpdate;
+            sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
+
+            SharedPreferences.Editor e = prefs.edit();
+            e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
+            e.commit();
+            Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
+            intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
+
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 

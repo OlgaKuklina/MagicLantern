@@ -1,22 +1,34 @@
 package com.example.android.magiclantern.fragments;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+
+import android.support.v4.graphics.ColorUtils;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
@@ -26,15 +38,20 @@ import com.example.android.magiclantern.data.MovieDataContainer;
 import com.example.android.magiclantern.data.ReviewData;
 import com.example.android.magiclantern.data.TrailerData;
 import com.example.android.magiclantern.utils.JSONLoader;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
@@ -43,6 +60,7 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
+import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -52,17 +70,19 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
     private static final Uri URI = Uri.parse("content://com.example.popularmovies.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-
+    private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private MovieDetailsViewActivityState state;
     private ShareActionProvider mShareActionProvider;
     private MovieDataContainer detailDatas;
     private List<TrailerData> trailerData;
     private List<ReviewData> reviewData;
     private Button deleteFromFavButton;
+    private ScrollView scrollView;
     private LinearLayout trailerList;
     private LinearLayout reviewList;
     private Button markAsFavButton;
     private ImageView moviePoster;
+    private ImageView backgroundPoster;
     private TextView movieVoteAverage;
     private TextView movieDate;
     private TextView movieDuration;
@@ -88,6 +108,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_details_view_universal, container, false);
         moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
+        backgroundPoster = (ImageView) view.findViewById(R.id.background_poster);
         movieDate = (TextView) view.findViewById(R.id.movie_date);
         movieDuration = (TextView) view.findViewById(R.id.movie_duration);
         movieVoteAverage = (TextView) view.findViewById(R.id.vote_average);
@@ -97,6 +118,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (Button) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (Button) view.findViewById(R.id.delete_from_fav_button);
+        scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         Intent intent = getActivity().getIntent();
         Log.v(TAG, "oncreate - intent = " + intent);
         isTrailerLoaded = false;
@@ -167,7 +189,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             if(item == null) {
                 this.sharedIntent = shareIntent;
             }else {
-                mShareActionProvider.setShareIntent(shareIntent);
+//                mShareActionProvider.setShareIntent(shareIntent);
                 sharedIntent = null;
                 item.setVisible(true);
             }
@@ -189,10 +211,61 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     }
 
     private void populateDetailsViewData(final MovieDataContainer container) {
+
+
+
+        final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                if (getActivity() == null)
+                    return;
+                Log.v(TAG, "textSwatch.PaletteAsyncListener");
+
+                Palette.Swatch textSwatch = palette.getVibrantSwatch();
+                Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
+
+                Log.v(TAG, "textSwatch = "+ textSwatch);
+                Log.v(TAG, "bgSwatch = "+ bgSwatch);
+                if(textSwatch != null) {
+                    title.setTextColor(textSwatch.getTitleTextColor());
+                    title.setBackgroundColor(textSwatch.getRgb());
+                    Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
+                    Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
+                }
+                else {
+
+                }
+                if(bgSwatch != null) {
+                    scrollView.setBackgroundColor(bgSwatch.getRgb());
+                    Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(bgSwatch.getRgb()));
+                }
+
+
+            }
+        };
+
+        Callback callback = new Callback() {
+            @Override
+            public void onSuccess() {
+                    Bitmap bitmapBg =  ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                    Palette.from(bitmapBg).generate(paletteAsyncListener);
+
+            }
+
+            @Override
+            public void onError() {
+                Log.v(TAG, "Callback error");
+            }
+        };
         Picasso pic = Picasso.with(getActivity());
         pic.load(POSTER_BASE_URI + container.getMoviePoster())
                 .error(R.drawable.no_movies)
                 .into(moviePoster);
+
+        pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+                .fit()
+                .error(R.drawable.mpbg)
+                .into(backgroundPoster, callback);
 
         if (StringUtils.isNotBlank(container.getYear())) {
             movieDate.setText(container.getYear());
@@ -227,6 +300,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
                 values.put(COLUMN_VOTE_AVERAGE, container.getVoteaverage());
                 values.put(COLUMN_YEAR, container.getYear());
+                values.put(COLUMN_BACKGROUND_PATH, container.getbackgroundPath());
                 getActivity().getContentResolver().insert(URI, values);
                 markAsFavButton.setVisibility(View.GONE);
                 deleteFromFavButton.setVisibility(View.VISIBLE);
@@ -238,15 +312,15 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         // Fetch and store ShareActionProvider
         // Return true to display menu
         item = menu.findItem(R.id.menu_item_share);
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-        if(isTrailerLoaded) {
-            if(sharedIntent != null) {
-            mShareActionProvider.setShareIntent(sharedIntent);
-            item.setVisible(true);
-             }else{
-            item.setVisible(false);
-            }
-        }
+//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+//        if(isTrailerLoaded) {
+//            if(sharedIntent != null) {
+//            mShareActionProvider.setShareIntent(sharedIntent);
+//            item.setVisible(true);
+//             }else{
+//            item.setVisible(false);
+//            }
+//        }
         return true;
     }
 
@@ -272,7 +346,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             super.onPostExecute(jObj);
             if (jObj != null) {
                 try {
-                    detailDatas = new MovieDataContainer(jObj.getString("poster_path"), id, jObj.getString("title"), jObj.getString("overview"), jObj.getString("release_date"), jObj.getInt("runtime"), jObj.getDouble("vote_average"));
+                    detailDatas = new MovieDataContainer(jObj.getString("poster_path"), id, jObj.getString("title"), jObj.getString("overview"), jObj.getString("release_date"), jObj.getInt("runtime"), jObj.getDouble("vote_average"), jObj.getString("backdrop_path"));
                     populateDetailsViewData(detailDatas);
 
                 } catch (JSONException e) {
@@ -281,12 +355,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
 
             } else {
 
-                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE}, null, null, null);
+                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE, COLUMN_BACKGROUND_PATH}, null, null, null);
                 Log.d(TAG, "Cursor = " + cursor.getCount());
                 if (cursor.getCount() != 0) {
 
                     cursor.moveToFirst();
-                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5));
+                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5), cursor.getString(6));
                     populateDetailsViewData(detailDatas);
                 }
 

@@ -51,7 +51,8 @@
         <activity
             android:name=".activities.DetailsViewUniversalActivity"
             android:label="@string/title_activity_details_view_universal"
-            android:parentActivityName=".activities.PopularMoviesUniversalActivity">
+            android:parentActivityName=".activities.PopularMoviesUniversalActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.magiclantern.activities.PopularMoviesUniversalActivity" />

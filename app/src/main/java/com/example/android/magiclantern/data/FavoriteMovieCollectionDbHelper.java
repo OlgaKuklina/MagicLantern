@@ -12,12 +12,12 @@ public class FavoriteMovieCollectionDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FavoriteMovieCollectionDBName.db";
 
     public FavoriteMovieCollectionDbHelper(Context context) {
-        super(context, DATABASE_NAME , null, 1);
+        super(context, DATABASE_NAME , null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE favorite (_id INTEGER PRIMARY KEY, movieid INTEGER, title TEXT, movieplot TEXT, path TEXT, year TEXT, duration INTEGER, voteaverage REAL)");
+        db.execSQL("CREATE TABLE favorite (_id INTEGER PRIMARY KEY, movieid INTEGER, title TEXT, movieplot TEXT, path TEXT, year TEXT, duration INTEGER, voteaverage REAL, background_path TEXT)");
     }
 
     @Override

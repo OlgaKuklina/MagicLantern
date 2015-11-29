@@ -15,7 +15,7 @@
         <dimen name="my_nanodegree_text_size">16dp</dimen>
         <dimen name="detail_view_title_padding_left">20dp</dimen>
         <dimen name="detail_view_title_min_height">100dp</dimen>
-        <dimen name="detail_view_title_text_size">35sp</dimen>
+        <dimen name="detail_view_title_text_size">25sp</dimen>
         <dimen name="detail_view_image_layout_width">120dp</dimen>
 
         <dimen name="detail_view_image_layout_height">185dp</dimen>
