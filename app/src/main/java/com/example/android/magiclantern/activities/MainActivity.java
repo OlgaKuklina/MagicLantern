@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
             sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
             SharedPreferences.Editor e = prefs.edit();
-            e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
+            e.putString("pref_sorting", "favorites.desc"); // save "value" to the SharedPreferences
             e.commit();
             Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
             intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
