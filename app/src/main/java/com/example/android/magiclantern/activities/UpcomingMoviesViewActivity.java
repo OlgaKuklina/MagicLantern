@@ -1,31 +1,28 @@
 package com.example.android.magiclantern.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
 
 import com.example.android.magiclantern.R;
-import com.example.android.magiclantern.asynctasks.OnMovieClickListener;
-import com.example.android.magiclantern.fragments.DetailsViewUniversalActivityFragment;
 
-public class DetailsViewUniversalActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+public class UpcomingMoviesViewActivity extends MainActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String SHARED_PREF_NAME = "com.example.android.magiclantern.magic.lantern";
+    private static final String TAG = UpcomingMoviesViewActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details_view_universal);
-        setTitle(R.string.title_activity_details_view_universal);
+        setContentView(R.layout.activity_upcoming_movies_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
@@ -34,8 +31,8 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                fab.setRippleColor(getResources().getColor(R.color.colorPrimary));
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -62,9 +59,7 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_details_view_universal, menu);
-        DetailsViewUniversalActivityFragment fragment = (DetailsViewUniversalActivityFragment) getFragmentManager().findFragmentById(R.id.fragment);
-        fragment.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.now_playing_view, menu);
         return true;
     }
 
@@ -83,8 +78,10 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         return false;
     }
 }

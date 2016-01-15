@@ -15,11 +15,11 @@
     </style>
 
 
-
     <style name="Widget.Design.CoordinatorLayout" parent="android:Widget">
         <item name="statusBarBackground">@drawable/mpbg</item>
 
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

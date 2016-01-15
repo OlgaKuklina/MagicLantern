@@ -1,9 +1,9 @@
 package com.example.android.magiclantern.activities;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.asynctasks.OnMovieClickListener;
 import com.example.android.magiclantern.fragments.DetailsViewUniversalActivityFragment;
+import com.example.android.magiclantern.fragments.PopularMoviesUniversalActivityFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMovieClickListener {
@@ -34,17 +35,45 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().collapseActionView();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences prefs = MainActivity.this.getSharedPreferences(SHARED_PREF_NAME, 0);
+
+                        SharedPreferences.Editor e = prefs.edit();
+                        e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
+                        e.commit();
+                        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        getSupportActionBar().setTitle("Favorites");
+
+                        transaction.replace(R.id.main_fragment, newFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
             }
         });
 
+        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.add(R.id.main_fragment, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+        String prefSortOrder = prefs.getString("pref_sorting", null);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -52,9 +81,26 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        Menu menu = navigationView.getMenu();
+        switch(prefSortOrder) {
+            case "popularity.desc":
+                menu.getItem(1).setChecked(true);
+                getSupportActionBar().setTitle("Popular movies");
+                break;
+            case "upcoming":
+                menu.getItem(3).setChecked(true);
+                getSupportActionBar().setTitle("Upcoming");
+                break;
+            case "top_rated":
+                menu.getItem(2).setChecked(true);
+                getSupportActionBar().setTitle("Top rated");
+                break;
+            case "current.desc":
+                menu.getItem(0).setChecked(true);
+                getSupportActionBar().setTitle("Now playing");
+                break;
+        }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -95,45 +141,60 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.now_playing) {
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.top_rated) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-            String sortOrderUpdate;
-            sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
             SharedPreferences.Editor e = prefs.edit();
-            e.putString("pref_sorting", "vote_average.desc"); // save "value" to the SharedPreferences
+            e.putString("pref_sorting", "current.desc"); // save "value" to the SharedPreferences
             e.commit();
-            Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
-            intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
 
-            startActivity(intent);
+            PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.main_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        } else if (id == R.id.top_rated) {
+            SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+
+            SharedPreferences.Editor e = prefs.edit();
+            e.putString("pref_sorting", "top_rated"); // save "value" to the SharedPreferences
+            e.commit();
+
+            PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.main_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+
         } else if (id == R.id.popular) {
 
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-            String sortOrderUpdate;
-            sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
             SharedPreferences.Editor e = prefs.edit();
             e.putString("pref_sorting", "popularity.desc"); // save "value" to the SharedPreferences
             e.commit();
-            Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
-            intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
+            PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-            startActivity(intent);
-        } else if (id == R.id.favorites) {
+            transaction.replace(R.id.main_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        } else if (id == R.id.upcoming) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-            String sortOrderUpdate;
-            sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
             SharedPreferences.Editor e = prefs.edit();
-            e.putString("pref_sorting", "favorites.desc"); // save "value" to the SharedPreferences
+            e.putString("pref_sorting", "upcoming"); // save "value" to the SharedPreferences
             e.commit();
-            Intent intent = new Intent(this, PopularMoviesUniversalActivity.class);
-            intent.putExtra("pref_sorting", prefs.getString("pref_sorting", null));
+            PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-            startActivity(intent);
+            transaction.replace(R.id.main_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
         } else if (id == R.id.nav_share) {
 

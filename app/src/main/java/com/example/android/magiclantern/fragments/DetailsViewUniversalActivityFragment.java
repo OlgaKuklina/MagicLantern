@@ -26,11 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.activities.MovieDetailsViewActivityState;
@@ -68,7 +70,7 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 public class DetailsViewUniversalActivityFragment extends Fragment {
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
-    private static final Uri URI = Uri.parse("content://com.example.popularmovies.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.android.magiclantern.popularmovies.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private MovieDetailsViewActivityState state;
@@ -76,11 +78,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private MovieDataContainer detailDatas;
     private List<TrailerData> trailerData;
     private List<ReviewData> reviewData;
-    private Button deleteFromFavButton;
+    private ImageButton deleteFromFavButton;
     private ScrollView scrollView;
     private LinearLayout trailerList;
     private LinearLayout reviewList;
-    private Button markAsFavButton;
+    private ImageButton markAsFavButton;
     private ImageView moviePoster;
     private ImageView backgroundPoster;
     private TextView movieVoteAverage;
@@ -90,6 +92,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private TextView title;
     private Intent sharedIntent;
     private MenuItem item;
+    private Toolbar toolbar;
     private boolean isTrailerLoaded;
     private int id;
 
@@ -107,6 +110,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_details_view_universal, container, false);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
         backgroundPoster = (ImageView) view.findViewById(R.id.background_poster);
         movieDate = (TextView) view.findViewById(R.id.movie_date);
@@ -116,8 +120,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         title = (TextView) view.findViewById(R.id.title);
         trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
-        markAsFavButton = (Button) view.findViewById(R.id.mark_as_fav_button);
-        deleteFromFavButton = (Button) view.findViewById(R.id.delete_from_fav_button);
+        markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
+        deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         Intent intent = getActivity().getIntent();
         Log.v(TAG, "oncreate - intent = " + intent);
@@ -221,14 +225,15 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                     return;
                 Log.v(TAG, "textSwatch.PaletteAsyncListener");
 
-                Palette.Swatch textSwatch = palette.getVibrantSwatch();
+                Palette.Swatch textSwatch = palette.getLightVibrantSwatch();
                 Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
 
                 Log.v(TAG, "textSwatch = "+ textSwatch);
                 Log.v(TAG, "bgSwatch = "+ bgSwatch);
                 if(textSwatch != null) {
                     title.setTextColor(textSwatch.getTitleTextColor());
-                    title.setBackgroundColor(textSwatch.getRgb());
+                    title.setBackgroundColor( bgSwatch.getTitleTextColor());
+
                     Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
                     Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
                 }

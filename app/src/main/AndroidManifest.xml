@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.magiclantern">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -32,7 +34,7 @@
             android:name=".data.FavoriteMovieCollectionProvider"
             android:authorities="com.android.magiclantern.popularmovies.provider"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <activity
             android:name=".activities.PopularMoviesUniversalActivity"
@@ -56,6 +58,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.magiclantern.activities.PopularMoviesUniversalActivity" />
+        </activity>
+        <activity
+            android:name=".activities.UpcomingMoviesViewActivity"
+            android:label="@string/title_activity_now_playing_view"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.magiclantern.activities.MainActivity" />
         </activity>
     </application>
 

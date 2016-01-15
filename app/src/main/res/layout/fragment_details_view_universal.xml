@@ -27,8 +27,7 @@
             android:paddingLeft="@dimen/detail_view_title_padding_left"
             android:text="movie title"
             android:textColor="@color/detail_view_text_color"
-            android:textSize="@dimen/detail_view_title_text_size"
-            android:background="@color/color_title_background"/>
+            android:textSize="@dimen/detail_view_title_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,24 +82,24 @@
                     android:textColor="@color/detail_view_vote_average_text_color"
                     android:textSize="@dimen/detail_text_view_vote_average_text_size" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/mark_as_fav_button"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/heart"
-                    android:textColor="@color/detail_view_movie_details_text_color"
-                    android:visibility="visible" />
+                    android:src="@drawable/anchor_48dp"
+                    android:background="@android:color/transparent"
+                    android:visibility="gone" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/delete_from_fav_button"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:background="@color/detail_view_star_button_color"
-                    android:src="@drawable/heart"
+                    android:src="@drawable/anchor_fav_48dp"
+                    android:background="@android:color/transparent"
                     android:visibility="gone" />
 
             </LinearLayout>
