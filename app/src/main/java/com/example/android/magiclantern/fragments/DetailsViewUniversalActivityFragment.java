@@ -1,22 +1,16 @@
 package com.example.android.magiclantern.fragments;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,7 +34,6 @@ import com.example.android.magiclantern.data.TrailerData;
 import com.example.android.magiclantern.utils.JSONLoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -232,7 +223,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 Log.v(TAG, "bgSwatch = "+ bgSwatch);
                 if(textSwatch != null) {
                     title.setTextColor(textSwatch.getTitleTextColor());
-                    title.setBackgroundColor( bgSwatch.getTitleTextColor());
+                    title.setBackgroundColor(textSwatch.getRgb());
 
                     Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
                     Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
@@ -243,6 +234,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 if(bgSwatch != null) {
                     scrollView.setBackgroundColor(bgSwatch.getRgb());
                     Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(bgSwatch.getRgb()));
+                    moviePlot.setTextColor(bgSwatch.getBodyTextColor());
                 }
 
 
@@ -252,8 +244,13 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         Callback callback = new Callback() {
             @Override
             public void onSuccess() {
-                    Bitmap bitmapBg =  ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                if(backgroundPoster!=null) {
+                    Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
                     Palette.from(bitmapBg).generate(paletteAsyncListener);
+                } else if(moviePoster!=null) {
+                    Bitmap bitmapBg = ((BitmapDrawable) moviePoster.getDrawable()).getBitmap();
+                    Palette.from(bitmapBg).generate(paletteAsyncListener);
+                }
 
             }
 
@@ -264,12 +261,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         };
         Picasso pic = Picasso.with(getActivity());
         pic.load(POSTER_BASE_URI + container.getMoviePoster())
-                .error(R.drawable.no_movies)
+                .error(R.drawable.no_movie_poster)
                 .into(moviePoster);
 
         pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
                 .fit()
-                .error(R.drawable.mpbg)
+                .error(R.drawable.no_background_poster)
                 .into(backgroundPoster, callback);
 
         if (StringUtils.isNotBlank(container.getYear())) {

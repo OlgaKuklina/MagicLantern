@@ -206,11 +206,12 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-
                 if (!loadingState) {
+                    Log.v(TAG, "onScroll = " + firstVisibleItem+"," + visibleItemCount+","  +  totalItemCount);
+                    loadingState = true;
                     FetchNowPlaying fetchMovieTask = new FetchNowPlaying(adapter, this);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
-                    loadingState = true;
+                    Log.v(TAG, "totalItemCount = " + totalItemCount);
 
                 }
             }
@@ -220,7 +221,7 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         @Override
         public void onFetchCompleted() {
             loadingState = false;
-
+            Log.v(TAG, "onFetchCompleted = " + loadingState);
         }
 
         @Override

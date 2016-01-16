@@ -107,9 +107,9 @@ public class MainActivityFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
+                    loadingState = true;
                     FetchNowPlaying fetchMovieTask = new FetchNowPlaying(adapter, this);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
-                    loadingState = true;
 
                 }
             }

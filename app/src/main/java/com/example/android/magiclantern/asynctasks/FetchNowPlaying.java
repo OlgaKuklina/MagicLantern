@@ -32,6 +32,7 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
             for (MovieData res : moviePosters) {
+                Log.v(TAG, "res id = " + res.getMovieId() + ", res movie poster = " + res.getMoviePoster() + ",page = " + res.getMoviePage());
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
@@ -53,14 +54,14 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
             }
-            Log.v(TAG, "page:" + jObj.getInt("page") + "params[0] =" + params[0]);
+            Log.v(TAG, "page:" + jObj.getInt("page") + ", params[0] =" + params[0]);
             JSONArray movieArray = jObj.getJSONArray("results");
             Log.v(TAG, "length:" + movieArray.length());
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.optJSONObject(i);
                 String moviePoster = movie.getString("poster_path");
                 int movieId = movie.getInt("id");
-                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId);
+                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, params[0]);
                 moviePosters.add(data);
                 Log.v(TAG, "moviePoster = " + moviePoster);
             }
@@ -68,6 +69,10 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
         }
+        for (MovieData res : moviePosters) {
+            Log.v(TAG, "doInBackground res id = " + res.getMovieId() + ", res movie poster = " + res.getMoviePoster() + ",page = " + res.getMoviePage());
+        }
+
         return moviePosters;
     }
 }

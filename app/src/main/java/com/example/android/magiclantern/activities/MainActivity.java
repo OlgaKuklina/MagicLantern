@@ -62,13 +62,16 @@ public class MainActivity extends AppCompatActivity
                 });
             }
         });
+        Log.v(TAG, "MainActivity:savedInstanceState=" + savedInstanceState);
 
-        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if(savedInstanceState==null) {
+            PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        transaction.add(R.id.main_fragment, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+            transaction.replace(R.id.main_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);

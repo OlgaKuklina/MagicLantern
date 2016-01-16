@@ -56,7 +56,7 @@ public class ImageAdapter extends BaseAdapter {
         }
         Picasso pic = Picasso.with(mContext);
         pic.load(finalMoviePosters.get(position).getMoviePoster())
-                .error(R.drawable.no_movies)
+                .error(R.drawable.no_movie_poster)
                 .into(imageView);
         return imageView;
     }
