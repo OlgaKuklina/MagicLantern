@@ -32,7 +32,7 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
             for (MovieData res : moviePosters) {
-                Log.v(TAG, "res id = " + res.getMovieId() + ", res movie poster = " + res.getMoviePoster() + ",page = " + res.getMoviePage());
+                Log.v(TAG, "res id = " + res.getMovieId() + ", res movie poster = " + res.getMoviePoster());
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
@@ -55,22 +55,21 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
                 return null;
             }
             Log.v(TAG, "page:" + jObj.getInt("page") + ", params[0] =" + params[0]);
+            Log.v(TAG,"jObj - " + jObj);
             JSONArray movieArray = jObj.getJSONArray("results");
             Log.v(TAG, "length:" + movieArray.length());
             for (int i = 0; i < movieArray.length(); i++) {
-                JSONObject movie = movieArray.optJSONObject(i);
+                JSONObject movie = movieArray.getJSONObject(i);
                 String moviePoster = movie.getString("poster_path");
                 int movieId = movie.getInt("id");
-                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, params[0]);
+                String movieTitle = movie.getString("title");
+                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, movieTitle);
                 moviePosters.add(data);
-                Log.v(TAG, "moviePoster = " + moviePoster);
+                Log.v(TAG, "moviePoster = " + moviePoster + ", movieID = " + movieId);
             }
 
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
-        }
-        for (MovieData res : moviePosters) {
-            Log.v(TAG, "doInBackground res id = " + res.getMovieId() + ", res movie poster = " + res.getMoviePoster() + ",page = " + res.getMoviePage());
         }
 
         return moviePosters;

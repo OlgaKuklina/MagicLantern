@@ -12,6 +12,7 @@ import com.example.android.magiclantern.data.MovieData;
 import java.util.ArrayList;
 
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
+import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 
 /**
@@ -34,12 +35,12 @@ public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<Movi
     protected ArrayList<MovieData> doInBackground(Void... params) {
         ArrayList<MovieData> moviePosters = new ArrayList<>();
 
-        final Cursor cursor = contentResolver.query(URI, new String[]{COLUMN_NAME_MOVIE_ID, COLUMN_POSTER_PATH}, null, null, null);
+        final Cursor cursor = contentResolver.query(URI, new String[]{COLUMN_NAME_MOVIE_ID, COLUMN_POSTER_PATH, COLUMN_NAME_TITLE}, null, null, null);
 
         if (cursor != null && cursor.getCount() != 0) {
             Log.d(TAG, "Cursor = " + cursor.getCount());
             while (cursor.moveToNext()) {
-                MovieData data = new MovieData(POSTER_BASE_URI + cursor.getString(1), cursor.getInt(0));
+                MovieData data = new MovieData(POSTER_BASE_URI + cursor.getString(1), cursor.getInt(0), cursor.getString(2));
                 moviePosters.add(data);
                 Log.v(TAG, "moviePoster = " + data);
             }

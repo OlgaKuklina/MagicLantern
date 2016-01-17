@@ -5,7 +5,6 @@ package com.example.android.magiclantern.data;
  */
 public class MovieDataContainer extends MovieData {
 
-    public final String title;
     public final String plot;
     public final String year;
     public final Integer duration;
@@ -13,18 +12,13 @@ public class MovieDataContainer extends MovieData {
     public final String backdrop_path;
 
     public MovieDataContainer(String moviePoster, int movieId, String title, String plot, String year, Integer duration, Double voteaverage, String backgroundPath) {
-        super(moviePoster, movieId);
-        this.title = title;
+        super(moviePoster, movieId, title);
         this.plot = plot;
         this.year = year;
         this.duration = duration;
         this.voteaverage = voteaverage;
         this.backdrop_path = backgroundPath;
 
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getPlot() {

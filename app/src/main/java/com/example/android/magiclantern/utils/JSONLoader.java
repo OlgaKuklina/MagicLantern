@@ -46,6 +46,7 @@ public class JSONLoader {
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
+                Log.v(TAG, "buffer - " + buffer.toString());
             }
 
             if (buffer.length() == 0) {
@@ -55,6 +56,7 @@ public class JSONLoader {
             movieJsonStr = buffer.toString();
             Log.v(TAG, "Movie JSON String: " + movieJsonStr);
             JSONObject jObj = new JSONObject(movieJsonStr);
+            Log.v(TAG, "Movie JSON obj: " + jObj);
             return jObj;
 
         } catch (IOException | JSONException e) {

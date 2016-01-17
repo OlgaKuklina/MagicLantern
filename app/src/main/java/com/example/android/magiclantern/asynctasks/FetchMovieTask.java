@@ -46,7 +46,8 @@ public class FetchMovieTask extends AsyncTask<Integer, Void, ArrayList<MovieData
                 JSONObject movie = movieArray.optJSONObject(i);
                 String moviePoster = movie.getString("poster_path");
                 int movieId = movie.getInt("id");
-                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId);
+                String movieTitle = movie.getString("title");
+                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, movieTitle);
                 moviePosters.add(data);
                 Log.v(TAG, "moviePoster = " + moviePoster);
             }

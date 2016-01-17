@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         switch(prefSortOrder) {
             case "popularity.desc":
                 menu.getItem(1).setChecked(true);
-                getSupportActionBar().setTitle("Popular movies");
+                getSupportActionBar().setTitle("Popular");
                 break;
             case "upcoming":
                 menu.getItem(3).setChecked(true);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "current.desc":
                 menu.getItem(0).setChecked(true);
-                getSupportActionBar().setTitle("Now playing");
+                getSupportActionBar().setTitle("In Theatres");
                 break;
         }
     }
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.now_playing) {
+
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
 
             SharedPreferences.Editor e = prefs.edit();
@@ -156,6 +157,8 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.main_fragment, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
+            getSupportActionBar().setTitle("In Theatres");
 
         } else if (id == R.id.top_rated) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
+            getSupportActionBar().setTitle("Top rated");
 
         } else if (id == R.id.popular) {
 
@@ -186,6 +190,8 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
+            getSupportActionBar().setTitle("Popular");
+
         } else if (id == R.id.upcoming) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
 
@@ -198,6 +204,8 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.main_fragment, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
+            getSupportActionBar().setTitle("Upcoming");
 
         } else if (id == R.id.nav_share) {
 

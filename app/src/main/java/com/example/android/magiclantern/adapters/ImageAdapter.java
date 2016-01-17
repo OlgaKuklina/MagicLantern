@@ -1,17 +1,22 @@
 package com.example.android.magiclantern.adapters;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.data.MovieData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -23,6 +28,7 @@ public class ImageAdapter extends BaseAdapter {
     private static final int IMAGE_WIDTH = 185;
     private static final int IMAGE_HEIGHT = 278;
     private final ArrayList<MovieData> finalMoviePosters = new ArrayList<>();
+    private final HashSet<Integer> movieIdSet = new HashSet<>();
     private final float density;
 
     private final Context mContext;
@@ -46,23 +52,37 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
         ImageView imageView;
+        TextView textView;
         if (convertView == null) {
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density), (int) (IMAGE_HEIGHT * density)));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_layout, parent, false);
+
+
         } else {
-            imageView = (ImageView) convertView;
+            view = convertView;
         }
+        MovieData data = finalMoviePosters.get(position);
+        imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
+        view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density), (int) (IMAGE_HEIGHT * density)));
+        //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        textView = (TextView) view.findViewById(R.id.movie_title);
+        textView.setText(data.getTitle());
         Picasso pic = Picasso.with(mContext);
-        pic.load(finalMoviePosters.get(position).getMoviePoster())
+        pic.load(data.getMoviePoster())
                 .error(R.drawable.no_movie_poster)
                 .into(imageView);
-        return imageView;
+        return view;
     }
 
+
     public void add(MovieData res) {
+        if(movieIdSet.contains(res.getMovieId())){
+            Log.w(TAG, "Movie duplicate found, movieID = " + res.getMovieId());
+            return;
+        }
         finalMoviePosters.add(res);
+        movieIdSet.add(res.getMovieId());
     }
 
     public void addAll(List<MovieData> res) {
