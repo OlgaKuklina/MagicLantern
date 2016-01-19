@@ -70,7 +70,8 @@ public class ImageAdapter extends BaseAdapter {
         textView.setText(data.getTitle());
         Picasso pic = Picasso.with(mContext);
         pic.load(data.getMoviePoster())
-                .error(R.drawable.no_movie_poster)
+               // .error(R.drawable.no_movie_poster)
+                //.error(R.drawable.no_movie_poster)
                 .into(imageView);
         return view;
     }

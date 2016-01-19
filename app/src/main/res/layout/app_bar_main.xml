@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:background="@drawable/mpbg"
-            android:elevation="6dp" />
+            android:background="@color/colorPrimary"
+            android:elevation="10dp" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -31,6 +31,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:elevation="8dp"
-        android:src="@drawable/anchor_48dp" />
+        android:src="@drawable/ic_anchor_48" />
 
 </android.support.design.widget.CoordinatorLayout>

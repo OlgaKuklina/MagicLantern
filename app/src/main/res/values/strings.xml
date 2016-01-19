@@ -20,7 +20,7 @@
     <string name="title_activity_movie_details_view">MovieDetailsViewActivity</string>
     <string name="pref_select_sort_type">Select sorting type</string>
     <string name="pref_sort_type">Sorting by</string>
-    <string name="pref_sort_default">vote_average.desc</string>
+    <string name="pref_sort_default">popularity.desc</string>
     <string name="title_popular_movies_settings_activity">Popular Movie app Settings</string>
 
     <string name="details_view_no_release_date">No release date</string>

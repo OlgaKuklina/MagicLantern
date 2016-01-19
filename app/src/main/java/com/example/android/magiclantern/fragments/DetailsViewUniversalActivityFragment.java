@@ -81,6 +81,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private TextView movieDuration;
     private TextView moviePlot;
     private TextView title;
+    private TextView rating;
+
     private Intent sharedIntent;
     private MenuItem item;
     private Toolbar toolbar;
@@ -109,6 +111,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         movieVoteAverage = (TextView) view.findViewById(R.id.vote_average);
         moviePlot = (TextView) view.findViewById(R.id.movie_plot);
         title = (TextView) view.findViewById(R.id.title);
+        rating = (TextView) view.findViewById(R.id.rating);
         trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
@@ -216,27 +219,43 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                     return;
                 Log.v(TAG, "textSwatch.PaletteAsyncListener");
 
-                Palette.Swatch textSwatch = palette.getLightVibrantSwatch();
+                Palette.Swatch textSwatch = palette.getMutedSwatch();
                 Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
 
-                Log.v(TAG, "textSwatch = "+ textSwatch);
-                Log.v(TAG, "bgSwatch = "+ bgSwatch);
-                if(textSwatch != null) {
+                Log.v(TAG, "textSwatch = " + textSwatch);
+                Log.v(TAG, "bgSwatch = " + bgSwatch);
+                if(textSwatch != null && bgSwatch != null) {
                     title.setTextColor(textSwatch.getTitleTextColor());
                     title.setBackgroundColor(textSwatch.getRgb());
+                    rating.setBackgroundColor(bgSwatch.getTitleTextColor());
+                    rating.setBackgroundColor(bgSwatch.getRgb());
 
                     Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
                     Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
                 }
-                else {
-
+                else if (bgSwatch != null) {
+                    title.setBackgroundColor(bgSwatch.getRgb());
+                    title.setTextColor(bgSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(bgSwatch.getBodyTextColor());
+                    rating.setTextColor(bgSwatch.getRgb());
                 }
-                if(bgSwatch != null) {
-                    scrollView.setBackgroundColor(bgSwatch.getRgb());
-                    Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(bgSwatch.getRgb()));
-                    moviePlot.setTextColor(bgSwatch.getBodyTextColor());
-                }
+                else if (textSwatch != null) {
+                    title.setBackgroundColor(textSwatch.getRgb());
+                    title.setTextColor(textSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(textSwatch.getBodyTextColor());
+                    rating.setTextColor(textSwatch.getRgb());
 
+                }else {
+                    title.setTextColor(getResources().getColor(R.color.textcolorPrimary));
+                    title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    rating.setTextColor(getResources().getColor(R.color.detail_view_background_color));
+                    rating.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+              //   Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(bgSwatch.getRgb()));
+                    //moviePlot.setTextColor(bgSwatch.getBodyTextColor());
+
+                scrollView.setBackgroundColor(getResources().getColor(R.color.detail_view_background_color));
 
             }
         };
@@ -257,6 +276,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             @Override
             public void onError() {
                 Log.v(TAG, "Callback error");
+                Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                Palette.from(bitmapBg).generate(paletteAsyncListener);
             }
         };
         Picasso pic = Picasso.with(getActivity());
@@ -266,6 +287,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
 
         pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
                 .fit()
+                //.centerCrop()
                 .error(R.drawable.no_background_poster)
                 .into(backgroundPoster, callback);
 

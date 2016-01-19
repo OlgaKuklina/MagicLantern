@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/textcolorPrimary</item>
+        <item name="android:textColorSecondary">@color/textcolorSec</item>
         <item name="android:textColorPrimary">@color/textcolorPrimary</item>
 
 
@@ -17,6 +17,7 @@
 
     <style name="Widget.Design.CoordinatorLayout" parent="android:Widget">
         <item name="statusBarBackground">@drawable/mpbg</item>
+        <!--<item name="statusBarBackground">@color/colorPrimary</item>-->
 
     </style>
 
