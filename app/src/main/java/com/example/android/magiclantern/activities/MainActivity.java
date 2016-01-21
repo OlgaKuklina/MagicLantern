@@ -5,17 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.android.magiclantern.R;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         });
         Log.v(TAG, "MainActivity:savedInstanceState=" + savedInstanceState);
 
-        if(savedInstanceState==null) {
+        if (savedInstanceState == null) {
             PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-        String prefSortOrder = prefs.getString("pref_sorting",getString(R.string.pref_sort_default));
+        String prefSortOrder = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Menu menu = navigationView.getMenu();
-        switch(prefSortOrder) {
+        switch (prefSortOrder) {
             case "popularity.desc":
                 menu.getItem(1).setChecked(true);
                 getSupportActionBar().setTitle("Popular");

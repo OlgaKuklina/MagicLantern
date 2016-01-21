@@ -66,12 +66,13 @@ public class ImageAdapter extends BaseAdapter {
         imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density), (int) (IMAGE_HEIGHT * density)));
         //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        textView = (TextView) view.findViewById(R.id.movie_title);
-        textView.setText(data.getTitle());
+        if(data.getMoviePoster()==null){
+            textView = (TextView) view.findViewById(R.id.movie_title);
+            textView.setText(data.getTitle());
+        }
+
         Picasso pic = Picasso.with(mContext);
         pic.load(data.getMoviePoster())
-               // .error(R.drawable.no_movie_poster)
-                //.error(R.drawable.no_movie_poster)
                 .into(imageView);
         return view;
     }
@@ -82,6 +83,7 @@ public class ImageAdapter extends BaseAdapter {
             Log.w(TAG, "Movie duplicate found, movieID = " + res.getMovieId());
             return;
         }
+
         finalMoviePosters.add(res);
         movieIdSet.add(res.getMovieId());
     }

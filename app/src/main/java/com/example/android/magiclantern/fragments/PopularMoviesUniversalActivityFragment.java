@@ -84,9 +84,6 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
             return;
         }
 
-//        if(sortOrderUpdate.equals(sortOrder)){
-//            return;
-//        }
         sortOrder = sortOrderUpdate;
 
         if (sortOrderUpdate.equals("favorites")) {

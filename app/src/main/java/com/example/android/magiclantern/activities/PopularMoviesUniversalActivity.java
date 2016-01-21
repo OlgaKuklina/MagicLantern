@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.asynctasks.OnMovieClickListener;

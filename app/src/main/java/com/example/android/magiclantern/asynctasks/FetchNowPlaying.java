@@ -50,12 +50,12 @@ public class FetchNowPlaying extends AsyncTask<Integer, Void, ArrayList<MovieDat
         try {
 
             JSONObject jObj = JSONLoader.load("/movie/now_playing" + "?page=" + params[0]);
-            if(jObj == null) {
+            if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
             }
             Log.v(TAG, "page:" + jObj.getInt("page") + ", params[0] =" + params[0]);
-            Log.v(TAG,"jObj - " + jObj);
+            Log.v(TAG, "jObj - " + jObj);
             JSONArray movieArray = jObj.getJSONArray("results");
             Log.v(TAG, "length:" + movieArray.length());
             for (int i = 0; i < movieArray.length(); i++) {

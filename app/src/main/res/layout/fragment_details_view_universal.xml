@@ -3,7 +3,6 @@
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     tools:context="com.example.android.myappportfolio.DetailsViewUniversalActivityFragment">
 
     <LinearLayout
@@ -15,31 +14,44 @@
             android:id="@+id/background_poster"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:gravity="center_horizontal" />
+
+    <LinearLayout
+        android:id="@+id/rating"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:elevation="4dp">
+
+
+        <ImageView
+            android:id="@+id/star_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_rating_24"
             android:gravity="center_vertical" />
 
 
         <TextView
-            android:id="@+id/rating"
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:fontFamily="Arial"
-            android:gravity="left"
-            android:text="movie raiting"
-            android:icon="@drawable/ic_top_rated_24"
-            android:textColor="@color/detail_view_text_color"
-            android:textSize="@dimen/detail_view_title_text_size"
-            android:elevation="4dp"/>
+            android:id="@+id/text_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="Arial"
+            android:fontFamily="Roboto"
+            android:textStyle="normal"
             android:gravity="center_vertical"
             android:minHeight="@dimen/detail_view_title_min_height"
             android:paddingLeft="@dimen/detail_view_title_padding_left"
             android:text="movie title"
-            android:textColor="@color/detail_view_text_color"
             android:textSize="@dimen/detail_view_title_text_size"
             android:elevation="4dp"/>
 

@@ -35,7 +35,7 @@ public class FetchMovieTask extends AsyncTask<Integer, Void, ArrayList<MovieData
         try {
 
             JSONObject jObj = JSONLoader.load("/discover/movie?sort_by=" + sortOrder + "&page=" + params[0]);
-            if(jObj == null) {
+            if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
             }

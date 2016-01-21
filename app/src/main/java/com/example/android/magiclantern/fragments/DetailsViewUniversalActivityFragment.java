@@ -6,11 +6,11 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,12 +40,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
@@ -53,7 +51,6 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
-import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -81,7 +78,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private TextView movieDuration;
     private TextView moviePlot;
     private TextView title;
-    private TextView rating;
+    private LinearLayout  rating;
+    private TextView textRating;
+    private ImageView starRating;
 
     private Intent sharedIntent;
     private MenuItem item;
@@ -102,16 +101,18 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_details_view_universal, container, false);
+        View view = inflater.inflate(R.layout.fragment_details_view_universal, container, false);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
         backgroundPoster = (ImageView) view.findViewById(R.id.background_poster);
+        starRating = (ImageView) view.findViewById(R.id.star_rating);
         movieDate = (TextView) view.findViewById(R.id.movie_date);
         movieDuration = (TextView) view.findViewById(R.id.movie_duration);
         movieVoteAverage = (TextView) view.findViewById(R.id.vote_average);
         moviePlot = (TextView) view.findViewById(R.id.movie_plot);
         title = (TextView) view.findViewById(R.id.title);
-        rating = (TextView) view.findViewById(R.id.rating);
+        rating = (LinearLayout) view.findViewById(R.id.rating);
+        textRating = (TextView) view.findViewById(R.id.text_rating);
         trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
@@ -140,6 +141,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             }
         });
         return view;
+
     }
 
     public void fetchMovieData(int id) {
@@ -161,9 +163,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             populateTrailerList(trailerData = state.getTrailerDatas());
         }
     }
+
     public void clearState() {
         state = null;
     }
+
     private void populateTrailerList(List<TrailerData> data) {
         Log.v(TAG, "populateTrailerList - data = " + data);
         for (final TrailerData trailer : data) {
@@ -179,19 +183,19 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             trailerList.addView(view);
         }
         Log.v(TAG, "data " + data);
-        if(data != null && !data.isEmpty()) {
+        if (data != null && !data.isEmpty()) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             Uri uri = data.get(0).getTrailerUri();
             shareIntent.putExtra(Intent.EXTRA_TEXT, uri.toString());
-            if(item == null) {
+            if (item == null) {
                 this.sharedIntent = shareIntent;
-            }else {
+            } else {
 //                mShareActionProvider.setShareIntent(shareIntent);
                 sharedIntent = null;
                 item.setVisible(true);
             }
-        }else if(item != null) {
+        } else if (item != null) {
             item.setVisible(false);
         }
         isTrailerLoaded = true;
@@ -211,7 +215,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private void populateDetailsViewData(final MovieDataContainer container) {
 
 
-
         final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {
@@ -224,36 +227,35 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
 
                 Log.v(TAG, "textSwatch = " + textSwatch);
                 Log.v(TAG, "bgSwatch = " + bgSwatch);
-                if(textSwatch != null && bgSwatch != null) {
+                if (textSwatch != null && bgSwatch != null) {
                     title.setTextColor(textSwatch.getTitleTextColor());
                     title.setBackgroundColor(textSwatch.getRgb());
-                    rating.setBackgroundColor(bgSwatch.getTitleTextColor());
+                    textRating.setTextColor(bgSwatch.getTitleTextColor());
                     rating.setBackgroundColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getTitleTextColor());
 
                     Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
                     Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
-                }
-                else if (bgSwatch != null) {
+                } else if (bgSwatch != null) {
                     title.setBackgroundColor(bgSwatch.getRgb());
                     title.setTextColor(bgSwatch.getBodyTextColor());
                     rating.setBackgroundColor(bgSwatch.getBodyTextColor());
-                    rating.setTextColor(bgSwatch.getRgb());
-                }
-                else if (textSwatch != null) {
+                    textRating.setTextColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getRgb());
+                } else if (textSwatch != null) {
                     title.setBackgroundColor(textSwatch.getRgb());
                     title.setTextColor(textSwatch.getBodyTextColor());
                     rating.setBackgroundColor(textSwatch.getBodyTextColor());
-                    rating.setTextColor(textSwatch.getRgb());
+                    textRating.setTextColor(textSwatch.getRgb());
+                    starRating.setBackgroundColor(textSwatch.getRgb());
+                } else {
+                    title.setTextColor(getResources().getColor(R.color.textcolorPrimary, null));
+                    title.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
 
-                }else {
-                    title.setTextColor(getResources().getColor(R.color.textcolorPrimary));
-                    title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
-                    rating.setTextColor(getResources().getColor(R.color.detail_view_background_color));
-                    rating.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textRating.setTextColor(getResources().getColor(R.color.textcolorSec, null));
+                    rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
+                    PorterDuff.Mode mode = PorterDuff.Mode.SRC;
                 }
-              //   Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(bgSwatch.getRgb()));
-                    //moviePlot.setTextColor(bgSwatch.getBodyTextColor());
 
                 scrollView.setBackgroundColor(getResources().getColor(R.color.detail_view_background_color));
 
@@ -263,10 +265,10 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         Callback callback = new Callback() {
             @Override
             public void onSuccess() {
-                if(backgroundPoster!=null) {
+                if (backgroundPoster != null) {
                     Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
                     Palette.from(bitmapBg).generate(paletteAsyncListener);
-                } else if(moviePoster!=null) {
+                } else if (moviePoster != null) {
                     Bitmap bitmapBg = ((BitmapDrawable) moviePoster.getDrawable()).getBitmap();
                     Palette.from(bitmapBg).generate(paletteAsyncListener);
                 }
@@ -287,7 +289,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
 
         pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
                 .fit()
-                //.centerCrop()
+                        //.centerCrop()
                 .error(R.drawable.no_background_poster)
                 .into(backgroundPoster, callback);
 
@@ -302,7 +304,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             movieDuration.setVisibility(View.GONE);
         }
         if (container.getVoteaverage() != null) {
-            movieVoteAverage.setText(container.getVoteaverage() + getString(R.string.details_view_text_vote_average_divider));
+            textRating.setText(container.getVoteaverage() + getString(R.string.details_view_text_vote_average_divider));
         } else {
             movieVoteAverage.setVisibility(View.GONE);
         }
@@ -331,6 +333,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             }
         });
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Locate MenuItem with ShareActionProvider
         // Fetch and store ShareActionProvider
