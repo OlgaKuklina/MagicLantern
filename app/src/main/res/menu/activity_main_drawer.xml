@@ -25,7 +25,8 @@
             android:title="Upcoming" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicate"
+        android:titleCondensed="@string/app_name">
         <menu>
             <item
                 android:id="@+id/nav_share"

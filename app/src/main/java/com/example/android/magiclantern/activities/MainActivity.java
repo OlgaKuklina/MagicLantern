@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
         String prefSortOrder = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);

@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#3a6f8e</color>
-    <color name="colorPrimaryDark">#146696</color>
+    <color name="colorPrimary">#094c6b</color>
+    <color name="colorPrimaryDark">#FF28496B</color>
 
-    <color name="textcolorSec">#8b3026</color>
-    <color name="textcolorPrimary1">#c63b3b</color>
-
+    <color name="textcolor">#FF28496B</color>
+    <color name="textcolorSubtitle">#FF28496B</color>
+    <color name="textcolorTitle">#80999f</color>
 
     <color name="colorAccent">#FF28496B</color>
-    <color name="colorBackground">#80999f</color>
-    <color name="capstone_background_color">#54b2c7</color>
+    <color name="colorBackground">#4f8293</color>
+    <color name="background_color">#fde6bc</color>
     <color name="textcolorPrimary">#FF28496B</color>
-
-
+    <color name="textcolorSec">#8b3026</color>
+    <color name="textcolorSecLight">#FFFFFFFF</color>
 
 
     <color name="detail_view_title_background_color">#FF00656D</color>
-    <color name= "detail_view_background_color">#FFFFFF</color>
+    <color name= "detail_view_background_color">#fde6bc</color>
     <color name= "detail_view_text_color">#c63b3b</color>
     <color name= "detail_view_vote_average_text_color">#FF000000</color>
     <color name= "detail_view_movie_details_text_color">#FF828687</color>
     <color name= "main_view_background_color">#97bcc6</color>
-    <color name="main_activity_button_text_color">#FFFFFFFF</color>
+    <color name="main_activity_button_text_color">#094c6b</color>
     <color name="main_activity_button_background_color">#c63b3b</color>
     <color name="color_title_background">#4f8293</color>
 
     <color name="textcolorSeqc">#FF28496B</color>
     <color name= "detail_view_review_author_text_color">#FF000000</color>
-    <color name= "detail_view_star_button_color">#FF3FF7FF</color>
+    <color name= "detail_view_star_button_color">#97bcc6</color>
+
+    <color name="textcolorTitler">#80999f</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.android.magiclantern.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -11,6 +12,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +35,13 @@ import com.example.android.magiclantern.activities.MovieDetailsViewActivityState
 import com.example.android.magiclantern.data.MovieDataContainer;
 import com.example.android.magiclantern.data.ReviewData;
 import com.example.android.magiclantern.data.TrailerData;
+import com.example.android.magiclantern.utils.DeveloperKey;
 import com.example.android.magiclantern.utils.JSONLoader;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -55,12 +65,15 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailsViewUniversalActivityFragment extends Fragment {
+public class DetailsViewUniversalActivityFragment extends Fragment
+    implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
     private static final Uri URI = Uri.parse("content://com.android.magiclantern.popularmovies.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
+    private PagerAdapter pagerAdapter;
+    private ViewPager mPager;
     private MovieDetailsViewActivityState state;
     private ShareActionProvider mShareActionProvider;
     private MovieDataContainer detailDatas;
@@ -77,17 +90,20 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     private TextView movieDate;
     private TextView movieDuration;
     private TextView moviePlot;
+    private TextView moviePlotTitle;
+    private LinearLayout movielayout;
     private TextView title;
     private LinearLayout  rating;
     private TextView textRating;
     private ImageView starRating;
-
+    private ImageView seeMore;
+    private ImageView seeLess;
     private Intent sharedIntent;
     private MenuItem item;
     private Toolbar toolbar;
     private boolean isTrailerLoaded;
     private int id;
-
+    private boolean isSeeMore;
 
     public DetailsViewUniversalActivityFragment() {
     }
@@ -108,8 +124,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         starRating = (ImageView) view.findViewById(R.id.star_rating);
         movieDate = (TextView) view.findViewById(R.id.movie_date);
         movieDuration = (TextView) view.findViewById(R.id.movie_duration);
-        movieVoteAverage = (TextView) view.findViewById(R.id.vote_average);
         moviePlot = (TextView) view.findViewById(R.id.movie_plot);
+        moviePlotTitle = (TextView) view.findViewById(R.id.movie_plot_title);
+        movielayout = (LinearLayout) view.findViewById(R.id.movie_plot_layout);
         title = (TextView) view.findViewById(R.id.title);
         rating = (LinearLayout) view.findViewById(R.id.rating);
         textRating = (TextView) view.findViewById(R.id.text_rating);
@@ -117,6 +134,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
+        seeMore = (ImageView) view.findViewById(R.id.see_more);
+        seeLess = (ImageView) view.findViewById(R.id.see_less);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         Intent intent = getActivity().getIntent();
         Log.v(TAG, "oncreate - intent = " + intent);
@@ -140,6 +159,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 deleteFromFavButton.setVisibility(View.GONE);
             }
         });
+
+
         return view;
 
     }
@@ -170,6 +191,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
 
     private void populateTrailerList(List<TrailerData> data) {
         Log.v(TAG, "populateTrailerList - data = " + data);
+
         for (final TrailerData trailer : data) {
             View view = getActivity().getLayoutInflater().inflate(R.layout.movie_trailer_list_item, null);
             TextView tralerName = (TextView) view.findViewById(R.id.trailer_name);
@@ -199,6 +221,22 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
             item.setVisible(false);
         }
         isTrailerLoaded = true;
+
+        if (data != null && !data.isEmpty()) {
+            for (final TrailerData trailer : data) {
+                YouTubePlayerFragment youTubePlayerFragment =YouTubePlayerFragment.newInstance();
+                //getChildFragmentManager().beginTransaction().add(R.id.trailers_layout, youTubePlayerFragment).commit();
+                //youTubePlayerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
+                break;
+            }
+        }
+//        if (data != null && !data.isEmpty()) {
+//        // Instantiate a ViewPager and a PagerAdapter.
+//        mPager = (ViewPager) getView().findViewById(R.id.pager);
+//        pagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+//        mPager.setAdapter(pagerAdapter);
+//        }
+
     }
 
     private void populateReviewList(List<ReviewData> data) {
@@ -251,7 +289,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 } else {
                     title.setTextColor(getResources().getColor(R.color.textcolorPrimary, null));
                     title.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
-
                     textRating.setTextColor(getResources().getColor(R.color.textcolorSec, null));
                     rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
                     PorterDuff.Mode mode = PorterDuff.Mode.SRC;
@@ -311,8 +348,40 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
-            moviePlot.setText(container.getPlot());
+            String string = container.getPlot().substring(0,60) + "...";
+            moviePlot.setText(string);
+            seeMore.setVisibility(View.VISIBLE);
+            seeLess.setVisibility(View.INVISIBLE);
+            isSeeMore = true;
         }
+
+        movielayout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (StringUtils.isBlank(container.getPlot())) {
+                    moviePlot.setText(R.string.details_view_no_description);
+                    seeMore.setVisibility(View.INVISIBLE);
+                    seeLess.setVisibility(View.INVISIBLE);
+                }
+                Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
+                if (isSeeMore) {
+
+                    String string = container.getPlot();
+                    moviePlot.setText(string);
+                    seeMore.setVisibility(View.INVISIBLE);
+                    seeLess.setVisibility(View.VISIBLE);
+                    ;
+                } else {
+                    String string = container.getPlot().substring(0, 60) + "...";
+                    moviePlot.setText(string);
+                    seeMore.setVisibility(View.VISIBLE);
+                    seeLess.setVisibility(View.INVISIBLE);
+
+                }
+
+                isSeeMore = !isSeeMore;
+            }
+        });
         title.setText(container.getTitle());
 
         markAsFavButton.setOnClickListener(new View.OnClickListener() {
@@ -356,6 +425,31 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         state = new MovieDetailsViewActivityState(trailerData, reviewData, detailDatas);
+
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+            if (!wasRestored) {
+                Log.v(TAG, "trailerData " + trailerData);
+                if(trailerData != null && !trailerData.isEmpty()){
+                     Uri uri = trailerData.get(0).getTrailerUri();
+
+                    Log.v(TAG, "trailerData " + trailerData.size());
+                    String trailerCode = uri.getQueryParameter("v");
+                    if(trailerCode!=null){
+                        youTubePlayer.cueVideo(trailerCode);
+                    }
+                }
+            else{
+                  //  getChildFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
+
+                }
+
+            }
+        }
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
     }
 
@@ -452,6 +546,26 @@ public class DetailsViewUniversalActivityFragment extends Fragment {
                 populateReviewList(reviewData);
             }
 
+        }
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+            Log.v(TAG, " ScreenSlidePagerAdapter constructed");
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.v(TAG, " ScreenSlidePagerAdapter YouTubePlayerFragment");
+            YouTubePlayerFragment trailersFragment = YouTubePlayerFragment.newInstance();
+            trailersFragment.initialize(DeveloperKey.DEVELOPER_KEY, DetailsViewUniversalActivityFragment.this);
+            return trailersFragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
         }
     }
 }
