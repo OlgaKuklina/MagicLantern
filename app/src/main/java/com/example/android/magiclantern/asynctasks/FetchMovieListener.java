@@ -5,5 +5,6 @@ package com.example.android.magiclantern.asynctasks;
  */
 public interface FetchMovieListener {
     void onFetchCompleted();
+
     void onFetchFailed();
 }

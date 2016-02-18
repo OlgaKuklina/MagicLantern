@@ -15,7 +15,6 @@ import com.example.android.magiclantern.data.MovieData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class ImageAdapter extends BaseAdapter {
         imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density), (int) (IMAGE_HEIGHT * density)));
         //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        if(data.getMoviePoster()==null){
+        if (data.getMoviePoster() == null) {
             textView = (TextView) view.findViewById(R.id.movie_title);
             textView.setText(data.getTitle());
         }
@@ -79,7 +78,7 @@ public class ImageAdapter extends BaseAdapter {
 
 
     public void add(MovieData res) {
-        if(movieIdSet.contains(res.getMovieId())){
+        if (movieIdSet.contains(res.getMovieId())) {
             Log.w(TAG, "Movie duplicate found, movieID = " + res.getMovieId());
             return;
         }

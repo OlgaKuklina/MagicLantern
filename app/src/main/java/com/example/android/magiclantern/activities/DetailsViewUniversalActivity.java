@@ -23,8 +23,10 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String SHARED_PREF_NAME = "com.example.android.magiclantern.magic.lantern";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       // getLayoutInflater().setFactory(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_view_universal);
         setTitle(R.string.title_activity_details_view_universal);

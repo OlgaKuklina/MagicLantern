@@ -1,5 +1,6 @@
 package com.example.android.magiclantern.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ContentUris;
@@ -16,12 +17,62 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.ShareActionProvider;
+import android.widget.TextView;
+import android.widget.Toolbar;
+
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.graphics.Palette;
+import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,8 +91,6 @@ import com.example.android.magiclantern.utils.JSONLoader;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -61,17 +110,21 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
+import static com.example.android.magiclantern.utils.DeveloperKey.DEVELOPER_KEY;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailsViewUniversalActivityFragment extends Fragment
-    implements YouTubePlayer.OnInitializedListener {
+        implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
-    private static final Uri URI = Uri.parse("content://com.android.magiclantern.popularmovies.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.android.cinemaanchor.popularmovies.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
+    private static final String SHORT_TEXT_PREVIEW = " \n <font color=#cc0029>... show more</font>";
+    private static final String LONG_TEXT_PREVIEW = " \n<font color=#cc0029>...show less</font>";
+    private static final String END_TEXT_PREVIEW = "\n<font color=#cc0029> the end!</font>";
     private PagerAdapter pagerAdapter;
     private ViewPager mPager;
     private MovieDetailsViewActivityState state;
@@ -93,7 +146,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private TextView moviePlotTitle;
     private LinearLayout movielayout;
     private TextView title;
-    private LinearLayout  rating;
+    private LinearLayout rating;
     private TextView textRating;
     private ImageView starRating;
     private ImageView seeMore;
@@ -102,8 +155,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private MenuItem item;
     private Toolbar toolbar;
     private boolean isTrailerLoaded;
+    private LinearLayout reviewLayout;
     private int id;
     private boolean isSeeMore;
+    private boolean isReviewShown;
+    private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayer youTubePlayer;
 
     public DetailsViewUniversalActivityFragment() {
     }
@@ -118,6 +175,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details_view_universal, container, false);
+        youTubePlayerFragment = YouTubePlayerFragment.newInstance();
+        getChildFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         moviePoster = (ImageView) view.findViewById(R.id.movie_poster);
         backgroundPoster = (ImageView) view.findViewById(R.id.background_poster);
@@ -127,15 +186,13 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         moviePlot = (TextView) view.findViewById(R.id.movie_plot);
         moviePlotTitle = (TextView) view.findViewById(R.id.movie_plot_title);
         movielayout = (LinearLayout) view.findViewById(R.id.movie_plot_layout);
+        trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         title = (TextView) view.findViewById(R.id.title);
         rating = (LinearLayout) view.findViewById(R.id.rating);
         textRating = (TextView) view.findViewById(R.id.text_rating);
-        trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
-        seeMore = (ImageView) view.findViewById(R.id.see_more);
-        seeLess = (ImageView) view.findViewById(R.id.see_less);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         Intent intent = getActivity().getIntent();
         Log.v(TAG, "oncreate - intent = " + intent);
@@ -180,7 +237,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         } else {
             Log.v(TAG, "state = " + state.getTrailerDatas());
             populateDetailsViewData(detailDatas = state.getDetailDatas());
-            populateReviewList(reviewData = state.getReviewDatas());
+            populateReviewList(reviewData = state.getReviewDatas(), isReviewShown);
             populateTrailerList(trailerData = state.getTrailerDatas());
         }
     }
@@ -194,12 +251,19 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         for (final TrailerData trailer : data) {
             View view = getActivity().getLayoutInflater().inflate(R.layout.movie_trailer_list_item, null);
+            view.setTag(trailer);
             TextView tralerName = (TextView) view.findViewById(R.id.trailer_name);
             tralerName.setText(trailer.getTrailerName());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, trailer.getTrailerUri()));
+                    // getChildFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
+                    //startActivity(new Intent(Intent.ACTION_VIEW, trailer.getTrailerUri()));
+                    //YouTubePlayerFragment youTubePlayerFragment = YouTubePlayerFragment.newInstance();
+//                    getChildFragmentManager().beginTransaction().replace(R.id.youtube_fragment, youTubePlayerFragment).commit();
+                    TrailerData data = (TrailerData) v.getTag();
+                    youTubePlayer.loadVideo(data.getTrailerUri().getQueryParameter("v"));
+
                 }
             });
             trailerList.addView(view);
@@ -213,7 +277,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (item == null) {
                 this.sharedIntent = shareIntent;
             } else {
-//                mShareActionProvider.setShareIntent(shareIntent);
+                //  mShareActionProvider.setShareIntent(shareIntent);
                 sharedIntent = null;
                 item.setVisible(true);
             }
@@ -223,12 +287,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         isTrailerLoaded = true;
 
         if (data != null && !data.isEmpty()) {
-            for (final TrailerData trailer : data) {
-                YouTubePlayerFragment youTubePlayerFragment =YouTubePlayerFragment.newInstance();
-                //getChildFragmentManager().beginTransaction().add(R.id.trailers_layout, youTubePlayerFragment).commit();
-                //youTubePlayerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
-                break;
-            }
+            youTubePlayerFragment.initialize(DEVELOPER_KEY, this);
+        } else {
+            getView().findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
+            getView().findViewById(R.id.movie_trailers).setVisibility(View.GONE);
+
         }
 //        if (data != null && !data.isEmpty()) {
 //        // Instantiate a ViewPager and a PagerAdapter.
@@ -239,21 +302,70 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
     }
 
-    private void populateReviewList(List<ReviewData> data) {
+    private void populateReviewList(final List<ReviewData> data, boolean showReview) {
+        if (data == null && data.isEmpty()) {
+
+            reviewList.setVisibility(View.GONE);
+        }
+
         for (final ReviewData review : data) {
             View view = getActivity().getLayoutInflater().inflate(R.layout.movie_review_list_item, null);
             TextView reviewAuthor = (TextView) view.findViewById(R.id.review_author);
             reviewAuthor.setText(review.getReviewAuthor());
-            TextView reviewContent = (TextView) view.findViewById(R.id.review_content);
-            reviewContent.setText(review.getReviewContent());
+            TextView reviewContentStart = (TextView) view.findViewById(R.id.review_content_start);
+            TextView reviewContentEnd = (TextView) view.findViewById(R.id.review_content_end);
+            StringBuilder buildStart = new StringBuilder();
+            buildStart.append(review.getReviewContent());
+
+            if (buildStart.length() > 72) {
+                reviewContentStart.setText(Html.fromHtml(buildStart.substring(0, 72) + SHORT_TEXT_PREVIEW));
+                reviewContentEnd.setText(Html.fromHtml(buildStart.substring(0, buildStart.length()) + LONG_TEXT_PREVIEW));
+                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+                Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+
+            } else {
+                reviewContentStart.setText(buildStart);
+                reviewContentEnd.setText(Html.fromHtml(buildStart + END_TEXT_PREVIEW));
+
+                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+            }
+            Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+
+            reviewContentStart.setVisibility(View.VISIBLE);
+            reviewContentEnd.setVisibility(View.GONE);
+
             reviewList.addView(view);
+
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    TextView contentStart = (TextView) v.findViewById(R.id.review_content_start);
+                    TextView contentEnd = (TextView) v.findViewById(R.id.review_content_end);
+
+                    Log.v(TAG, "reviewContentstart ON" + contentStart.getText());
+                    Log.v(TAG, "reviewContentEnd ON" + contentEnd.getText());
+                    if (!isReviewShown) {
+                        contentEnd.setVisibility(View.VISIBLE);
+                        contentStart.setVisibility(View.GONE);
+                    } else {
+                        contentStart.setVisibility(View.VISIBLE);
+                        contentEnd.setVisibility(View.GONE);
+                    }
+                    isReviewShown = !isReviewShown;
+                }
+            });
         }
+        reviewList.setVisibility(View.VISIBLE);
+
     }
 
     private void populateDetailsViewData(final MovieDataContainer container) {
 
 
         final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
+            @SuppressLint("NewApi")
             @Override
             public void onGenerated(Palette palette) {
                 if (getActivity() == null)
@@ -348,40 +460,37 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
-            String string = container.getPlot().substring(0,60) + "...";
-            moviePlot.setText(string);
-            seeMore.setVisibility(View.VISIBLE);
-            seeLess.setVisibility(View.INVISIBLE);
-            isSeeMore = true;
+            if (container.getPlot().length() > 80) {
+                moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+            } else {
+                String string = container.getPlot();
+                moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+            }
         }
 
-        movielayout.setOnClickListener(new View.OnClickListener(){
+        movielayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (StringUtils.isBlank(container.getPlot())) {
                     moviePlot.setText(R.string.details_view_no_description);
-                    seeMore.setVisibility(View.INVISIBLE);
-                    seeLess.setVisibility(View.INVISIBLE);
                 }
                 Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
                 if (isSeeMore) {
-
                     String string = container.getPlot();
-                    moviePlot.setText(string);
-                    seeMore.setVisibility(View.INVISIBLE);
-                    seeLess.setVisibility(View.VISIBLE);
-                    ;
+                    moviePlot.setText(Html.fromHtml(string + LONG_TEXT_PREVIEW));
                 } else {
-                    String string = container.getPlot().substring(0, 60) + "...";
-                    moviePlot.setText(string);
-                    seeMore.setVisibility(View.VISIBLE);
-                    seeLess.setVisibility(View.INVISIBLE);
-
+                    if (container.getPlot().length() > 80) {
+                        moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+                    } else {
+                        String string = container.getPlot();
+                        moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                    }
                 }
 
                 isSeeMore = !isSeeMore;
             }
         });
+
         title.setText(container.getTitle());
 
         markAsFavButton.setOnClickListener(new View.OnClickListener() {
@@ -425,29 +534,32 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         state = new MovieDetailsViewActivityState(trailerData, reviewData, detailDatas);
+        if (youTubePlayer != null) {
+            youTubePlayer.release();
+        }
 
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-            if (!wasRestored) {
-                Log.v(TAG, "trailerData " + trailerData);
-                if(trailerData != null && !trailerData.isEmpty()){
-                     Uri uri = trailerData.get(0).getTrailerUri();
+        if (!wasRestored) {
+            Log.v(TAG, "trailerData " + trailerData);
+            if (trailerData != null && !trailerData.isEmpty()) {
+                Uri uri = trailerData.get(0).getTrailerUri();
 
-                    Log.v(TAG, "trailerData " + trailerData.size());
-                    String trailerCode = uri.getQueryParameter("v");
-                    if(trailerCode!=null){
-                        youTubePlayer.cueVideo(trailerCode);
-                    }
+                Log.v(TAG, "trailerData " + trailerData.size());
+                String trailerCode = uri.getQueryParameter("v");
+                if (trailerCode != null) {
+                    this.youTubePlayer = youTubePlayer;
+                    youTubePlayer.cueVideo(trailerCode);
                 }
-            else{
-                  //  getChildFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
-
-                }
-
+            } else {
+                getChildFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
             }
+
         }
+    }
+
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
@@ -543,7 +655,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
                 }
-                populateReviewList(reviewData);
+                populateReviewList(reviewData, isReviewShown);
             }
 
         }
@@ -559,7 +671,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         public Fragment getItem(int position) {
             Log.v(TAG, " ScreenSlidePagerAdapter YouTubePlayerFragment");
             YouTubePlayerFragment trailersFragment = YouTubePlayerFragment.newInstance();
-            trailersFragment.initialize(DeveloperKey.DEVELOPER_KEY, DetailsViewUniversalActivityFragment.this);
+            trailersFragment.initialize(DEVELOPER_KEY, DetailsViewUniversalActivityFragment.this);
             return trailersFragment;
         }
 

@@ -73,13 +73,13 @@ public class FavoriteMovieCollectionProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
         Cursor cursor = builder.query(
-                        db,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                db,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
         return cursor;
     }
 

@@ -1,9 +1,7 @@
 package com.example.android.magiclantern.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,11 +19,12 @@ import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.adapters.ImageAdapter;
 import com.example.android.magiclantern.asynctasks.FetchFavoriteMovieTask;
 import com.example.android.magiclantern.asynctasks.FetchMovieListener;
+import com.example.android.magiclantern.asynctasks.FetchMovieTask;
 import com.example.android.magiclantern.asynctasks.FetchNowPlaying;
 import com.example.android.magiclantern.asynctasks.FetchTopRated;
 import com.example.android.magiclantern.asynctasks.FetchUpcomingMovieTask;
 import com.example.android.magiclantern.asynctasks.OnMovieClickListener;
-import com.example.android.magiclantern.asynctasks.FetchMovieTask;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -88,17 +87,16 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
 
         if (sortOrderUpdate.equals("favorites")) {
             adapter.clearData();
-                FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver());
-                task.execute();
-        } else if(sortOrderUpdate.equals("current.desc")) {
+            FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver());
+            task.execute();
+        } else if (sortOrderUpdate.equals("current.desc")) {
 
             gridview.setOnScrollListener(new NowPlayingMovieViewScrollListener());
-        } else if(sortOrder.equals("top_rated")){
+        } else if (sortOrder.equals("top_rated")) {
             gridview.setOnScrollListener(new TopRatedMovieViewScrollListener());
-        }  else if(sortOrderUpdate.equals("upcoming")) {
+        } else if (sortOrderUpdate.equals("upcoming")) {
             gridview.setOnScrollListener(new UpcomingMovieViewScrollListener());
-        }
-        else {
+        } else {
             gridview.setOnScrollListener(new PopularMovieViewScrollListener());
         }
     }
@@ -204,7 +202,7 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                 if (!loadingState) {
-                    Log.v(TAG, "onScroll = " + firstVisibleItem+"," + visibleItemCount+","  +  totalItemCount);
+                    Log.v(TAG, "onScroll = " + firstVisibleItem + "," + visibleItemCount + "," + totalItemCount);
                     loadingState = true;
                     FetchNowPlaying fetchMovieTask = new FetchNowPlaying(adapter, this);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
@@ -228,29 +226,29 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         }
     }
 
-        private class UpcomingMovieViewScrollListener implements AbsListView.OnScrollListener, FetchMovieListener {
-            private static final int PAGE_SIZE = 20;
-            private boolean loadingState = false;
+    private class UpcomingMovieViewScrollListener implements AbsListView.OnScrollListener, FetchMovieListener {
+        private static final int PAGE_SIZE = 20;
+        private boolean loadingState = false;
 
 
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-            }
+        }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
-                    if (!loadingState) {
-                        FetchUpcomingMovieTask fetchMovieTask = new FetchUpcomingMovieTask(adapter, this);
-                        fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
-                        loadingState = true;
+                if (!loadingState) {
+                    FetchUpcomingMovieTask fetchMovieTask = new FetchUpcomingMovieTask(adapter, this);
+                    fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
+                    loadingState = true;
 
-                    }
                 }
-
             }
+
+        }
 
         @Override
         public void onFetchCompleted() {

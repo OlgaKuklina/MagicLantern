@@ -67,7 +67,7 @@ public class MainActivityFragment extends Fragment {
 
         boolean isConnected = checkInternetConnection();
         Log.v(TAG, "Network is" + isConnected);
-        if (!isConnected ) {
+        if (!isConnected) {
             Log.e(TAG, "Network is not available");
 
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), R.string.network_not_available_message, Toast.LENGTH_LONG);
@@ -77,7 +77,7 @@ public class MainActivityFragment extends Fragment {
         NowPlayingMovieViewScrollListener fetchMovieListener = new NowPlayingMovieViewScrollListener();
 //        FetchNowPlaying task = new FetchNowPlaying(adapter, fetchMovieListener);
 //                task.execute();
-            gridview.setOnScrollListener(fetchMovieListener);
+        gridview.setOnScrollListener(fetchMovieListener);
     }
 
 

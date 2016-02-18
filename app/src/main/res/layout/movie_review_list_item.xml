@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/review_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/touch_effect"
+    android:clickable="true"
+    android:focusable="true"
     android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
     android:orientation="vertical">
 
@@ -10,16 +13,26 @@
         android:id="@+id/review_author"
         style="@style/DetailViewSubTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingLeft="@dimen/detail_text_view_review_author_paddingLeft"
-        android:paddingTop="@dimen/detail_text_view_review_author_paddingTop"/>
+        android:paddingTop="@dimen/detail_text_view_review_author_paddingTop" />
 
     <TextView
-        android:id="@+id/review_content"
+        android:id="@+id/review_content_start"
         style="@style/DetailViewText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/detail_text_view_review_content_paddingLeft"
+        android:paddingTop="@dimen/detail_text_view_review_content_paddingTop" />
+
+
+    <TextView
+        android:id="@+id/review_content_end"
+        style="@style/DetailViewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingLeft="@dimen/detail_text_view_review_content_paddingLeft"
         android:paddingTop="@dimen/detail_text_view_review_content_paddingTop" />

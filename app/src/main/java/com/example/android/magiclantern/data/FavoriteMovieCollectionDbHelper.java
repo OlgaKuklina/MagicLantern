@@ -12,7 +12,7 @@ public class FavoriteMovieCollectionDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FavoriteMovieCollectionDBName.db";
 
     public FavoriteMovieCollectionDbHelper(Context context) {
-        super(context, DATABASE_NAME , null, 2);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override

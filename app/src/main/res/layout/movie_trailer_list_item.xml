@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/touch_effect"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="@dimen/detail_text_view_trailer_list_item_minSize"
@@ -12,7 +12,7 @@
         android:layout_width="@dimen/detail_text_view_trailer_image_view_layout_width"
         android:layout_height="@dimen/detail_text_view_trailer_image_view_layout_height"
         android:layout_gravity="center"
-        android:src="@drawable/popular" />
+        android:src="@drawable/play" />
 
     <TextView
         android:id="@+id/trailer_name"
