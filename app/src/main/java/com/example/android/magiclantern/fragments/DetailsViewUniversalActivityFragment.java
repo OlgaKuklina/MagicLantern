@@ -409,6 +409,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         } else {
             movieVoteAverage.setVisibility(View.GONE);
         }
+        Log.v(TAG, " overview '" + container.getPlot() +"'");
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
@@ -533,7 +534,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             super.onPostExecute(jObj);
             if (jObj != null) {
                 try {
-                    detailDatas = new MovieDataContainer(jObj.getString("poster_path"), id, jObj.getString("title"), jObj.getString("overview"), jObj.getString("release_date"), jObj.getInt("runtime"), jObj.getDouble("vote_average"), jObj.getString("backdrop_path"));
+
+                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"));
                     populateDetailsViewData(detailDatas);
 
                 } catch (JSONException e) {
@@ -632,6 +634,31 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         @Override
         public int getCount() {
             return 1;
+        }
+    }
+    private String getString(JSONObject jobj, String name) throws JSONException {
+        if(jobj.isNull(name)) {
+            return null;
+        }
+        else {
+             return jobj.getString(name);
+        }
+    }
+    private double getDouble(JSONObject jobj, String name, double defaultValue) throws JSONException {
+        if(jobj.isNull(name)) {
+            return defaultValue;
+        }
+        else {
+            return jobj.getDouble(name);
+        }
+    }
+
+    private int getInt(JSONObject jobj, String name, int defaultValue) throws JSONException {
+        if(jobj.isNull(name)) {
+            return defaultValue;
+        }
+        else {
+            return jobj.getInt(name);
         }
     }
 }
