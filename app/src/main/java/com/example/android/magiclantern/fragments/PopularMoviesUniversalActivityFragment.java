@@ -50,7 +50,7 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_popular_movies_universal, container, false);
-
+        Log.v(TAG, "onCreateView");
         gridview = (GridView) view.findViewById(R.id.gridview);
         if (getActivity() instanceof OnMovieClickListener) {
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

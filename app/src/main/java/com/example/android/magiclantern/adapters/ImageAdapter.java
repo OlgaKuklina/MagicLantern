@@ -93,6 +93,7 @@ public class ImageAdapter extends BaseAdapter {
 
     public void clearData() {
         finalMoviePosters.clear();
+        movieIdSet.clear();
         notifyDataSetChanged();
     }
 

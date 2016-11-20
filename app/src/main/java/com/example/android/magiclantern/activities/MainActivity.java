@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -228,8 +228,8 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         getSupportActionBar().setTitle("Favorites");
 
-        transaction.replace(R.id.main_fragment, newFragment);
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.main_fragment, newFragment, "favFragment");
+        transaction.addToBackStack("favFragment");
         transaction.commit();
     }
 }

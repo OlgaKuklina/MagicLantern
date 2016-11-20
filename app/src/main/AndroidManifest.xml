@@ -32,7 +32,7 @@
 
         <provider
             android:name=".data.FavoriteMovieCollectionProvider"
-            android:authorities="com.android.magiclantern.popularmovies.provider"
+            android:authorities="com.android.magiclantern.provider"
             android:enabled="true"
             android:exported="true" />
 

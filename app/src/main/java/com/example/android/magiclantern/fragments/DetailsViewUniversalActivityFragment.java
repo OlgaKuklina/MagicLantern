@@ -47,60 +47,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import android.annotation.SuppressLint;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.graphics.Palette;
-import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
-import android.widget.TextView;
-import android.widget.Toolbar;
-
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.activities.MovieDetailsViewActivityState;
 import com.example.android.magiclantern.data.MovieDataContainer;
 import com.example.android.magiclantern.data.ReviewData;
 import com.example.android.magiclantern.data.TrailerData;
-import com.example.android.magiclantern.utils.DeveloperKey;
 import com.example.android.magiclantern.utils.JSONLoader;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
@@ -119,7 +71,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
-    private static final Uri URI = Uri.parse("content://com.android.cinemaanchor.popularmovies.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#cc0029>... show more</font>";
@@ -144,7 +96,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private TextView movieDuration;
     private TextView moviePlot;
     private TextView moviePlotTitle;
-    private LinearLayout movielayout;
+    private LinearLayout moviePlotlayout;
     private TextView title;
     private LinearLayout rating;
     private TextView textRating;
@@ -185,7 +137,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         movieDuration = (TextView) view.findViewById(R.id.movie_duration);
         moviePlot = (TextView) view.findViewById(R.id.movie_plot);
         moviePlotTitle = (TextView) view.findViewById(R.id.movie_plot_title);
-        movielayout = (LinearLayout) view.findViewById(R.id.movie_plot_layout);
+        moviePlotlayout = (LinearLayout) view.findViewById(R.id.movie_plot_layout);
         trailerList = (LinearLayout) view.findViewById(R.id.movie_trailers);
         title = (TextView) view.findViewById(R.id.title);
         rating = (LinearLayout) view.findViewById(R.id.rating);
@@ -462,13 +414,15 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         } else {
             if (container.getPlot().length() > 80) {
                 moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+                isSeeMore = true;
             } else {
                 String string = container.getPlot();
                 moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                isSeeMore = false;
             }
         }
 
-        movielayout.setOnClickListener(new View.OnClickListener() {
+        moviePlotlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (StringUtils.isBlank(container.getPlot())) {

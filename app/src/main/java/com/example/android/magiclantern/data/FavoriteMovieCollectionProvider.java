@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.util.Log;
 
 public class FavoriteMovieCollectionProvider extends ContentProvider {
-    private static final String TAG = "FavMovieCollectionProv";
-    private static final String AUTHORITY = "com.android.magiclantern.popularmovies.provider";
+    private static final String TAG = FavoriteMovieCollectionProvider.class.getSimpleName();
+    private static final String AUTHORITY = "com.android.magiclantern.provider";
     private FavoriteMovieCollectionDbHelper helper;
     private UriMatcher matcher;
 

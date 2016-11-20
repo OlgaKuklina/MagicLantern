@@ -19,7 +19,7 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
  * Created by olgakuklina on 2015-09-10.
  */
 public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<MovieData>> {
-    private static final Uri URI = Uri.parse("content://com.android.magiclantern.popularmovies.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
     private static final String TAG = FetchFavoriteMovieTask.class.getSimpleName();
@@ -58,6 +58,7 @@ public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<Movi
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
             for (MovieData res : moviePosters) {
+                Log.v(TAG, "onPostExecute ");
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
