@@ -15,13 +15,13 @@
         <ImageView
             android:id="@+id/background_poster"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/detail_view_backgroun_poster_min_height"
             android:gravity="center_horizontal" />
 
         <LinearLayout
             android:id="@+id/rating"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="@dimen/detail_view_rating_min_height"
             android:layout_gravity="center_vertical"
             android:elevation="4dp"
             android:orientation="horizontal">
@@ -197,6 +197,7 @@
                 <FrameLayout
                     android:id="@+id/youtube_fragment"
                     android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+                    android:padding="@dimen/detail_view_youtube_fragment_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"></FrameLayout>
 

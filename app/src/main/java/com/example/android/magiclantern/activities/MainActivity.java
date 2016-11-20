@@ -36,21 +36,17 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().collapseActionView();
 
-
-                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openFavorites();
-                    }
-                });
-
-        Log.v(TAG, "MainActivity:savedInstanceState=" + savedInstanceState);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFavorites();
+            }
+        });
 
         if (savedInstanceState == null) {
             PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
             transaction.replace(R.id.main_fragment, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -188,8 +184,8 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
 
             getSupportActionBar().setTitle("Upcoming");
-        } else if (id == R.id.favorites){
-                openFavorites();
+        } else if (id == R.id.favorites) {
+            openFavorites();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

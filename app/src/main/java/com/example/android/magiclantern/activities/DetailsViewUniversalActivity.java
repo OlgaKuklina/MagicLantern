@@ -34,32 +34,8 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                fab.setRippleColor(getResources().getColor(R.color.colorPrimary));
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SharedPreferences prefs = DetailsViewUniversalActivity.this.getSharedPreferences(SHARED_PREF_NAME, 0);
 
-                        SharedPreferences.Editor e = prefs.edit();
-                        e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
-                        e.commit();
-                        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        getSupportActionBar().setTitle("Favorites");
 
-                        transaction.replace(R.id.main_fragment, newFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    }
-                });
-
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

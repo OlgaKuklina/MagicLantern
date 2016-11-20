@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -384,15 +385,21 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             }
         };
         Picasso pic = Picasso.with(getActivity());
+
         pic.load(POSTER_BASE_URI + container.getMoviePoster())
                 .error(R.drawable.no_movie_poster)
                 .into(moviePoster);
-
-        pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
-                .fit()
-                        //.centerCrop()
-                .error(R.drawable.no_background_poster)
-                .into(backgroundPoster, callback);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+                    .fit().centerCrop()
+                    .error(R.drawable.no_background_poster)
+                    .into(backgroundPoster, callback);
+        } else {
+            pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+                    .fit()
+                    .error(R.drawable.no_background_poster)
+                    .into(backgroundPoster, callback);
+        }
 
         if (StringUtils.isNotBlank(container.getYear())) {
             movieDate.setText(container.getYear());
