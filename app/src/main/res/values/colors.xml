@@ -4,8 +4,8 @@
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#FFD1F0F9</color>
 
-    <color name="textcolor">#ffffff</color>
-    <color name="textcolorSubtitle">#d1f0f9</color>
+    <color name="textcolor">#024c61</color>
+    <color name="textcolorSubtitle">#FF28496B</color>
     <color name="textcolorTitle">#fde4a9</color>
     <color name="colordetails">#e9d8b1</color>
 
@@ -32,5 +32,7 @@
     <color name="detail_view_review_author_text_color">#FF000000</color>
     <color name="detail_view_star_button_color">#8f2626</color>
 
-    <color name="textcolorTitler">#80999f</color>
+    <color name="textcolorTitler">#f1e8d7</color>
+    <color name="textdetcolortitle">#FF28496B</color>
+    <color name="textdetcolor">#FF28496B</color>
 </resources>

@@ -37,30 +37,14 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().collapseActionView();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        SharedPreferences prefs = MainActivity.this.getSharedPreferences(SHARED_PREF_NAME, 0);
-
-                        SharedPreferences.Editor e = prefs.edit();
-                        e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
-                        e.commit();
-                        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        getSupportActionBar().setTitle("Favorites");
-
-                        transaction.replace(R.id.main_fragment, newFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                        openFavorites();
                     }
                 });
-            }
-        });
+
         Log.v(TAG, "MainActivity:savedInstanceState=" + savedInstanceState);
 
         if (savedInstanceState == null) {
@@ -204,7 +188,8 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
 
             getSupportActionBar().setTitle("Upcoming");
-
+        } else if (id == R.id.favorites){
+                openFavorites();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -231,5 +216,20 @@ public class MainActivity extends AppCompatActivity
             layout.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    protected void openFavorites() {
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(SHARED_PREF_NAME, 0);
+
+        SharedPreferences.Editor e = prefs.edit();
+        e.putString("pref_sorting", "favorites"); // save "value" to the SharedPreferences
+        e.commit();
+        PopularMoviesUniversalActivityFragment newFragment = new PopularMoviesUniversalActivityFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        getSupportActionBar().setTitle("Favorites");
+
+        transaction.replace(R.id.main_fragment, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

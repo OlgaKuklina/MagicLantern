@@ -29,14 +29,14 @@
 
     <style name="DetailViewTitle">
         <item name="android:fontFamily">Roboto</item>
-        <item name="android:textColor">@color/textcolorTitle</item>
+        <item name="android:textColor">@color/textdetcolortitle</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15dp</item>
     </style>
 
     <style name="DetailViewSubTitle">
         <item name="android:fontFamily">Roboto</item>
-        <item name="android:textColor">@color/textcolorSubtitle</item>
+        <item name="android:textColor">@color/textdetcolor</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">12dp</item>
 
