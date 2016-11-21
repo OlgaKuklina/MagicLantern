@@ -571,24 +571,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         });
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Locate MenuItem with ShareActionProvider
-        // Fetch and store ShareActionProvider
-        // Return true to display menu
-        item = menu.findItem(R.id.menu_item_share);
-//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-//        if(isTrailerLoaded) {
-//            if(sharedIntent != null) {
-//            mShareActionProvider.setShareIntent(sharedIntent);
-//            item.setVisible(true);
-//             }else{
-//            item.setVisible(false);
-//            }
-//        }
-        return true;
-    }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -796,5 +778,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         else {
             return jobj.getInt(name);
         }
+    }
+
+    public List<TrailerData> getTrailerData() {
+        return trailerData;
     }
 }
