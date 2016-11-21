@@ -76,6 +76,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
     private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
+    private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#cc0029>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#cc0029>...show less</font>";
@@ -346,6 +347,8 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             ImageView castImage = (ImageView) view.findViewById(R.id.cast_image);
 
             TextView castCharacter = (TextView) view.findViewById(R.id.cast_charecter);
+
+
             if (cast.getCastName() == null) {
                 castImage.setVisibility(View.GONE);
                 castCharacter.setVisibility(View.GONE);
@@ -364,13 +367,18 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                     }
                     else {
                         Picasso pic = Picasso.with(getActivity());
-                        pic.load(cast.getCastImagePath())
+                        pic.load(POSTER_CAST_BASE_URI + cast.getCastImagePath())
                                 .fit().centerCrop()
                                 .error(R.drawable.no_movie_poster)
                                 .into(castImage);
 
                     }
             castList.addView(view);
+            if(cast.getCastOrder() ==7) {
+                break;
+
+            }
+
                 }
         castList.setVisibility(View.VISIBLE);
         }
