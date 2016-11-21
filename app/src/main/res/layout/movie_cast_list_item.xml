@@ -21,7 +21,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/touch_effect"
         android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
