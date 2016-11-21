@@ -7,18 +7,36 @@ package com.example.android.magiclantern.data;
 public class CastData {
 
     private String actorName;
-    private String pictureIdPath;
+    private String profilePath;
+    private String character;
+    private int personId;
+    private int castOrder;
 
-    public CastData(String actorName, String pictureIdPath) {
+    public CastData(String actorName, String profilePath, String character, int personId, int castOrder) {
         this.actorName = actorName;
-        this.pictureIdPath = pictureIdPath;
+        this.profilePath = profilePath;
+        this.character = character;
+        this.personId = personId;
+        this.castOrder = castOrder;
     }
 
-    public String getReviewAuthor() {
+    public String getCastName() {
         return actorName;
     }
 
-    public String getimagePath() {
-        return pictureIdPath;
+    public String getCastImagePath() {
+        return profilePath;
+    }
+
+    public String getCharacter() {
+        return character;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public int getCastOrder() {
+        return castOrder;
     }
 }

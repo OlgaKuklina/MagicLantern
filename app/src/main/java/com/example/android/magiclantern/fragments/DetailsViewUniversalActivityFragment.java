@@ -92,6 +92,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private ScrollView scrollView;
     private LinearLayout trailerList;
     private LinearLayout reviewList;
+    private LinearLayout castList;
     private ImageButton markAsFavButton;
     private ImageView moviePoster;
     private ImageView backgroundPoster;
@@ -116,6 +117,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private int id;
     private boolean isSeeMore;
     private boolean isReviewShown;
+    private boolean isCastShown;
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
 
@@ -149,6 +151,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         textRating = (TextView) view.findViewById(R.id.text_rating);
         textLanguage = (TextView) view.findViewById(R.id.text_language);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
+        castList = (LinearLayout) view.findViewById(R.id.cast_data);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
@@ -188,6 +191,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         this.id = id;
         trailerList.removeAllViews();
         reviewList.removeAllViews();
+        castList.removeAllViews();
 
         if (state == null) {
             FetchDetailsMovieTask task = new FetchDetailsMovieTask();
@@ -196,17 +200,18 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             tTask.execute(id);
             FetchReviewMovieTask rTask = new FetchReviewMovieTask();
             rTask.execute(id);
-
-            //TODO: implement casting fetch task
-//            FetchCastMovieTask cTask = new FetchCastMovieTask();
-//            rTask.execute(id);
+            FetchCastMovieTask cTask = new FetchCastMovieTask();
+            cTask.execute(id);
         } else {
             Log.v(TAG, "state = " + state.getTrailerDatas());
             populateDetailsViewData(detailDatas = state.getDetailDatas());
             populateReviewList(reviewData = state.getReviewDatas(), isReviewShown);
             populateTrailerList(trailerData = state.getTrailerDatas());
+            populateCastList(castData = state.getCastDatas(), isCastShown);
         }
     }
+
+
 
     public void clearState() {
         state = null;
@@ -326,6 +331,49 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         reviewList.setVisibility(View.VISIBLE);
 
     }
+
+    private void populateCastList(final List<CastData> data, boolean showCast) {
+        if (data == null && data.isEmpty()) {
+
+            castList.setVisibility(View.GONE);
+        }
+
+        for (final CastData cast : data) {
+            View view = getActivity().getLayoutInflater().inflate(R.layout.movie_cast_list_item, null);
+            TextView castName = (TextView) view.findViewById(R.id.cast_name);
+            Log.v(TAG, "cast.getCastName() " + cast.getCastName());
+
+            ImageView castImage = (ImageView) view.findViewById(R.id.cast_image);
+
+            TextView castCharacter = (TextView) view.findViewById(R.id.cast_charecter);
+            if (cast.getCastName() == null) {
+                castImage.setVisibility(View.GONE);
+                castCharacter.setVisibility(View.GONE);
+                castName.setVisibility(View.GONE);
+            } else {
+                castName.setText(cast.getCastName());
+            }
+                if(cast.getCharacter() == null) {
+                    castCharacter.setVisibility(View.GONE);
+                }
+                else {
+                    castCharacter.setText(cast.getCharacter());
+                }
+                    if(cast.getCastImagePath() == null) {
+                        castImage.setVisibility(View.GONE);
+                    }
+                    else {
+                        Picasso pic = Picasso.with(getActivity());
+                        pic.load(cast.getCastImagePath())
+                                .fit().centerCrop()
+                                .error(R.drawable.no_movie_poster)
+                                .into(castImage);
+
+                    }
+            castList.addView(view);
+                }
+        castList.setVisibility(View.VISIBLE);
+        }
 
     private void populateDetailsViewData(final MovieDataContainer container) {
 
@@ -536,7 +584,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        state = new MovieDetailsViewActivityState(trailerData, reviewData, detailDatas);
+        state = new MovieDetailsViewActivityState(trailerData, reviewData, castData, detailDatas);
         if (youTubePlayer != null) {
             youTubePlayer.release();
         }
@@ -668,7 +716,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
-            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/cast");
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/credits");
 
             return jObj;
         }
@@ -679,17 +727,18 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (jObj != null) {
                 castData = new ArrayList<CastData>();
                 try {
-                    JSONArray array = jObj.getJSONArray("results");
+                    JSONArray array = jObj.getJSONArray("cast");
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = array.getJSONObject(i);
 
 
-                        reviewData.add(new ReviewData(object.getString("author"), object.getString("content")));
+                        castData.add(new CastData(object.getString("name"), object.getString("profile_path"), object.getString("character"), object.getInt("id"), object.getInt("order")));
+
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
                 }
-                populateReviewList(reviewData, isReviewShown);
+                populateCastList(castData, isCastShown);
             }
 
         }

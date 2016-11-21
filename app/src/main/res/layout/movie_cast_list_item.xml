@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cast_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_effect"
+    android:clickable="true"
+    android:focusable="true"
+    android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/cast_name"
+        style="@style/DetailViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:textSize="@dimen/detail_text_view_movie_plot_text_size" />
+
+    <ImageView
+        android:id="@+id/cast_image"
+        android:layout_width="@dimen/detail_view_image_layout_width"
+        android:layout_height="@dimen/detail_view_image_layout_height"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="@dimen/detail_view_image_layout_marginLeft"
+        android:layout_marginTop="@dimen/detail_view_image_layout_marginTop" />
+
+
+    <TextView
+        android:id="@+id/cast_charecter"
+        style="@style/DetailViewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/detail_text_view_review_content_paddingLeft"
+        android:paddingTop="@dimen/detail_text_view_review_content_paddingTop" />
+</LinearLayout>
+
+
+
+
