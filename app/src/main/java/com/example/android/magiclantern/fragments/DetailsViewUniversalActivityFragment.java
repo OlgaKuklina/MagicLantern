@@ -15,13 +15,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +26,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.example.android.magiclantern.R;
+import com.example.android.magiclantern.activities.MovieDetailsViewActivityState;
 import com.example.android.magiclantern.data.CastData;
+import com.example.android.magiclantern.data.MovieDataContainer;
+import com.example.android.magiclantern.data.ReviewData;
+import com.example.android.magiclantern.data.TrailerData;
+import com.example.android.magiclantern.utils.JSONLoader;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -47,14 +49,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-import com.example.android.magiclantern.R;
-import com.example.android.magiclantern.activities.MovieDetailsViewActivityState;
-import com.example.android.magiclantern.data.MovieDataContainer;
-import com.example.android.magiclantern.data.ReviewData;
-import com.example.android.magiclantern.data.TrailerData;
-import com.example.android.magiclantern.utils.JSONLoader;
 
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
@@ -81,10 +75,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#cc0029>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#cc0029>...show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#cc0029> the end!</font>";
-    private PagerAdapter pagerAdapter;
-    private ViewPager mPager;
     private MovieDetailsViewActivityState state;
-    private ShareActionProvider mShareActionProvider;
     private MovieDataContainer detailDatas;
     private List<TrailerData> trailerData;
     private List<ReviewData> reviewData;
@@ -108,17 +99,13 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private TextView textRating;
     private TextView textLanguage;
     private ImageView starRating;
-    private ImageView seeMore;
-    private ImageView seeLess;
     private Intent sharedIntent;
     private MenuItem item;
     private Toolbar toolbar;
     private boolean isTrailerLoaded;
-    private LinearLayout reviewLayout;
     private int id;
     private boolean isSeeMore;
     private boolean isReviewShown;
-    private boolean isCastShown;
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
 
@@ -208,10 +195,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             populateDetailsViewData(detailDatas = state.getDetailDatas());
             populateReviewList(reviewData = state.getReviewDatas(), isReviewShown);
             populateTrailerList(trailerData = state.getTrailerDatas());
-            populateCastList(castData = state.getCastDatas(), isCastShown);
+            populateCastList(castData = state.getCastDatas());
         }
     }
-
 
 
     public void clearState() {
@@ -229,10 +215,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // getChildFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
-                    //startActivity(new Intent(Intent.ACTION_VIEW, trailer.getTrailerUri()));
-                    //YouTubePlayerFragment youTubePlayerFragment = YouTubePlayerFragment.newInstance();
-//                    getChildFragmentManager().beginTransaction().replace(R.id.youtube_fragment, youTubePlayerFragment).commit();
                     TrailerData data = (TrailerData) v.getTag();
                     youTubePlayer.loadVideo(data.getTrailerUri().getQueryParameter("v"));
 
@@ -249,7 +231,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (item == null) {
                 this.sharedIntent = shareIntent;
             } else {
-                //  mShareActionProvider.setShareIntent(shareIntent);
                 sharedIntent = null;
                 item.setVisible(true);
             }
@@ -265,12 +246,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             getView().findViewById(R.id.movie_trailers).setVisibility(View.GONE);
 
         }
-//        if (data != null && !data.isEmpty()) {
-//        // Instantiate a ViewPager and a PagerAdapter.
-//        mPager = (ViewPager) getView().findViewById(R.id.pager);
-//        pagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
-//        mPager.setAdapter(pagerAdapter);
-//        }
 
     }
 
@@ -333,7 +308,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
     }
 
-    private void populateCastList(final List<CastData> data, boolean showCast) {
+    private void populateCastList(final List<CastData> data) {
         if (data == null && data.isEmpty()) {
 
             castList.setVisibility(View.GONE);
@@ -356,32 +331,30 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             } else {
                 castName.setText(cast.getCastName());
             }
-                if(cast.getCharacter() == null) {
-                    castCharacter.setVisibility(View.GONE);
-                }
-                else {
-                    castCharacter.setText(cast.getCharacter());
-                }
-                    if(cast.getCastImagePath() == null) {
-                        castImage.setVisibility(View.GONE);
-                    }
-                    else {
-                        Picasso pic = Picasso.with(getActivity());
-                        pic.load(POSTER_CAST_BASE_URI + cast.getCastImagePath())
-                                .fit().centerCrop()
-                                .error(R.drawable.no_movie_poster)
-                                .into(castImage);
+            if (cast.getCharacter() == null) {
+                castCharacter.setVisibility(View.GONE);
+            } else {
+                castCharacter.setText(cast.getCharacter());
+            }
+            if (cast.getCastImagePath() == null) {
+                castImage.setVisibility(View.GONE);
+            } else {
+                Picasso pic = Picasso.with(getActivity());
+                pic.load(POSTER_CAST_BASE_URI + cast.getCastImagePath())
+                        .fit().centerCrop()
+                        .error(R.drawable.no_movie_poster)
+                        .into(castImage);
 
-                    }
+            }
             castList.addView(view);
-            if(cast.getCastOrder() ==7) {
+            if (cast.getCastOrder() == 7) {
                 break;
 
             }
 
-                }
-        castList.setVisibility(View.VISIBLE);
         }
+        castList.setVisibility(View.VISIBLE);
+    }
 
     private void populateDetailsViewData(final MovieDataContainer container) {
 
@@ -454,12 +427,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             }
         };
         Picasso pic = Picasso.with(getActivity());
-        if(container.getMoviePoster() == null) {
+        if (container.getMoviePoster() == null) {
             pic.load(R.drawable.no_movie_poster)
                     .fit().centerCrop()
                     .into(moviePoster);
-        }
-        else {
+        } else {
             pic.load(POSTER_BASE_URI + container.getMoviePoster())
                     .fit().centerCrop()
                     .error(R.drawable.no_movie_poster)
@@ -467,26 +439,24 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         }
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-            if(container.getbackgroundPath() == null) {
+            if (container.getbackgroundPath() == null) {
                 pic.load(R.drawable.no_background_poster)
                         .fit().centerCrop()
                         .into(backgroundPoster, callback);
-            }
-            else {
+            } else {
                 pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
                         .fit().centerCrop()
                         .error(R.drawable.no_background_poster)
                         .into(backgroundPoster, callback);
             }
         } else {
-            if(container.getbackgroundPath() == null) {
+            if (container.getbackgroundPath() == null) {
                 pic.load(R.drawable.no_background_poster)
                         .fit()
                         .into(backgroundPoster, callback);
-            }
-            else {
+            } else {
                 pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
                         .fit()
                         .error(R.drawable.no_background_poster)
@@ -512,7 +482,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         if (container.getOriginalLanguage() != null) {
             textLanguage.setText(container.getOriginalLanguage());
         }
-        Log.v(TAG, " overview '" + container.getPlot() +"'");
+        Log.v(TAG, " overview '" + container.getPlot() + "'");
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
@@ -604,6 +574,34 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
+    }
+
+    private String getString(JSONObject jobj, String name) throws JSONException {
+        if (jobj.isNull(name)) {
+            return null;
+        } else {
+            return jobj.getString(name);
+        }
+    }
+
+    private double getDouble(JSONObject jobj, String name, double defaultValue) throws JSONException {
+        if (jobj.isNull(name)) {
+            return defaultValue;
+        } else {
+            return jobj.getDouble(name);
+        }
+    }
+
+    private int getInt(JSONObject jobj, String name, int defaultValue) throws JSONException {
+        if (jobj.isNull(name)) {
+            return defaultValue;
+        } else {
+            return jobj.getInt(name);
+        }
+    }
+
+    public List<TrailerData> getTrailerData() {
+        return trailerData;
     }
 
     private class FetchDetailsMovieTask extends AsyncTask<Integer, Void, JSONObject> {
@@ -728,12 +726,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
                 }
-                populateCastList(castData, isCastShown);
+                populateCastList(castData);
             }
 
         }
     }
-
 
     private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -753,34 +750,5 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         public int getCount() {
             return 1;
         }
-    }
-    private String getString(JSONObject jobj, String name) throws JSONException {
-        if(jobj.isNull(name)) {
-            return null;
-        }
-        else {
-             return jobj.getString(name);
-        }
-    }
-    private double getDouble(JSONObject jobj, String name, double defaultValue) throws JSONException {
-        if(jobj.isNull(name)) {
-            return defaultValue;
-        }
-        else {
-            return jobj.getDouble(name);
-        }
-    }
-
-    private int getInt(JSONObject jobj, String name, int defaultValue) throws JSONException {
-        if(jobj.isNull(name)) {
-            return defaultValue;
-        }
-        else {
-            return jobj.getInt(name);
-        }
-    }
-
-    public List<TrailerData> getTrailerData() {
-        return trailerData;
     }
 }

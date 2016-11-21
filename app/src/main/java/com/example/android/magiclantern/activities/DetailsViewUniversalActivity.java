@@ -1,24 +1,16 @@
 package com.example.android.magiclantern.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-
-
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-
 
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.data.TrailerData;
@@ -37,7 +29,7 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       // getLayoutInflater().setFactory(this);
+        // getLayoutInflater().setFactory(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_view_universal);
         setTitle(R.string.title_activity_details_view_universal);
@@ -108,7 +100,7 @@ public class DetailsViewUniversalActivity extends AppCompatActivity
             case R.id.nav_send_trailer:
                 DetailsViewUniversalActivityFragment fragment = (DetailsViewUniversalActivityFragment) getFragmentManager().findFragmentById(R.id.fragment);
                 List<TrailerData> data = fragment.getTrailerData();
-                if(data != null && !data.isEmpty()) {
+                if (data != null && !data.isEmpty()) {
                     String trailerUri = data.get(0).getTrailerUri().toString();
                     shareIntent.putExtra(Intent.EXTRA_TEXT, trailerUri);
                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.action_send_trailer)));

@@ -3,7 +3,6 @@
     android:id="@+id/cast_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/touch_effect"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
@@ -21,25 +20,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
         android:layout_gravity="center_vertical"
+        android:minHeight="@dimen/detail_text_view_review_list_item_minSize"
         android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/cast_name"
-                style="@style/DetailViewTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="15dp"
-                android:textSize="@dimen/detail_text_view_movie_plot_text_size" />
+        <TextView
+            android:id="@+id/cast_name"
+            style="@style/DetailViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:textSize="@dimen/detail_text_view_movie_plot_text_size" />
 
-            <TextView
-                android:id="@+id/cast_charecter"
-                style="@style/DetailViewSubTitle"
-                android:layout_margin="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/cast_charecter"
+            style="@style/DetailViewSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp" />
+    </LinearLayout>
 
 
 </LinearLayout>

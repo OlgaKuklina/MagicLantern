@@ -100,23 +100,23 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/detail_text_view_movie_duration_paddingTop"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/detail_text_view_movie_duration_paddingTop">
 
                         <TextView
                             style="@style/DetailViewText"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="22dp"
-                            android:text = "Language: "
-                            android:gravity="center_vertical" />
+                            android:gravity="center_vertical"
+                            android:text="Language: " />
 
                         <TextView
                             android:id="@+id/text_language"
+                            style="@style/DetailViewText"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
-                            style="@style/DetailViewText"
                             android:gravity="center_vertical" />
                     </LinearLayout>
 
@@ -157,12 +157,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_margin="5dp"
             android:background="@color/detail_view_star_button_color"
             android:elevation="5dp"
             android:orientation="vertical"
-            android:layout_marginBottom="5dp"
             android:padding="1dp">
 
             <LinearLayout
@@ -219,9 +217,9 @@
                 <FrameLayout
                     android:id="@+id/youtube_fragment"
                     android:name="com.google.android.youtube.player.YouTubePlayerFragment"
-                    android:padding="@dimen/detail_view_youtube_fragment_padding"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/detail_view_youtube_fragment_padding"></FrameLayout>
 
             </LinearLayout>
         </LinearLayout>
@@ -245,9 +243,9 @@
                 <TextView
                     android:id="@+id/trailers_title"
                     style="@style/DetailViewTitle"
-                    android:layout_margin="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_margin="5dp"
                     android:text="Trailers:"
                     android:textSize="@dimen/detail_text_view_movie_plot_text_size" />
 
@@ -264,9 +262,9 @@
             android:id="@+id/cast_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@color/detail_view_star_button_color"
             android:elevation="5dp"
             android:orientation="vertical"
@@ -302,9 +300,9 @@
             android:id="@+id/reviews_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@color/detail_view_star_button_color"
             android:elevation="5dp"
             android:orientation="vertical"
