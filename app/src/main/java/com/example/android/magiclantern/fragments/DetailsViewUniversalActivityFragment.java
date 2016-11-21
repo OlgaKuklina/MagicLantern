@@ -33,6 +33,7 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.example.android.magiclantern.data.CastData;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -60,6 +61,7 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
+import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_LANGUAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
@@ -85,6 +87,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private MovieDataContainer detailDatas;
     private List<TrailerData> trailerData;
     private List<ReviewData> reviewData;
+    private List<CastData> castData;
     private ImageButton deleteFromFavButton;
     private ScrollView scrollView;
     private LinearLayout trailerList;
@@ -101,6 +104,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private TextView title;
     private LinearLayout rating;
     private TextView textRating;
+    private TextView textLanguage;
     private ImageView starRating;
     private ImageView seeMore;
     private ImageView seeLess;
@@ -143,23 +147,14 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         title = (TextView) view.findViewById(R.id.title);
         rating = (LinearLayout) view.findViewById(R.id.rating);
         textRating = (TextView) view.findViewById(R.id.text_rating);
+        textLanguage = (TextView) view.findViewById(R.id.text_language);
         reviewList = (LinearLayout) view.findViewById(R.id.movie_reviews);
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
-        Intent intent = getActivity().getIntent();
-        Log.v(TAG, "oncreate - intent = " + intent);
+
         isTrailerLoaded = false;
         item = null;
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            fetchMovieData(intent.getIntExtra(Intent.EXTRA_TEXT, -1));
-        }
-        Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_NAME_MOVIE_ID}, null, null, null);
-        if (cursor != null && cursor.getCount() != 0) {
-            deleteFromFavButton.setVisibility(View.VISIBLE);
-        } else {
-            markAsFavButton.setVisibility(View.VISIBLE);
-        }
 
         deleteFromFavButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,9 +165,23 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             }
         });
 
-
         return view;
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        Log.v(TAG, "oncreate - intent = " + intent);
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            fetchMovieData(intent.getIntExtra(Intent.EXTRA_TEXT, -1));
+        }
+        Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_NAME_MOVIE_ID}, null, null, null);
+        if (cursor != null && cursor.getCount() != 0) {
+            deleteFromFavButton.setVisibility(View.VISIBLE);
+        } else {
+            markAsFavButton.setVisibility(View.VISIBLE);
+        }
     }
 
     public void fetchMovieData(int id) {
@@ -187,6 +196,10 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             tTask.execute(id);
             FetchReviewMovieTask rTask = new FetchReviewMovieTask();
             rTask.execute(id);
+
+            //TODO: implement casting fetch task
+//            FetchCastMovieTask cTask = new FetchCastMovieTask();
+//            rTask.execute(id);
         } else {
             Log.v(TAG, "state = " + state.getTrailerDatas());
             populateDetailsViewData(detailDatas = state.getDetailDatas());
@@ -385,20 +398,44 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             }
         };
         Picasso pic = Picasso.with(getActivity());
-
-        pic.load(POSTER_BASE_URI + container.getMoviePoster())
-                .error(R.drawable.no_movie_poster)
-                .into(moviePoster);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+        if(container.getMoviePoster() == null) {
+            pic.load(R.drawable.no_movie_poster)
                     .fit().centerCrop()
-                    .error(R.drawable.no_background_poster)
-                    .into(backgroundPoster, callback);
+                    .into(moviePoster);
+        }
+        else {
+            pic.load(POSTER_BASE_URI + container.getMoviePoster())
+                    .fit().centerCrop()
+                    .error(R.drawable.no_movie_poster)
+                    .into(moviePoster);
+
+        }
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            if(container.getbackgroundPath() == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit().centerCrop()
+                        .into(backgroundPoster, callback);
+            }
+            else {
+                pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+                        .fit().centerCrop()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
         } else {
-            pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
-                    .fit()
-                    .error(R.drawable.no_background_poster)
-                    .into(backgroundPoster, callback);
+            if(container.getbackgroundPath() == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit()
+                        .into(backgroundPoster, callback);
+            }
+            else {
+                pic.load(BACKGROUND_BASE_URI + container.getbackgroundPath())
+                        .fit()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
         }
 
         if (StringUtils.isNotBlank(container.getYear())) {
@@ -415,6 +452,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             textRating.setText(container.getVoteaverage() + getString(R.string.details_view_text_vote_average_divider));
         } else {
             movieVoteAverage.setVisibility(View.GONE);
+        }
+        if (container.getOriginalLanguage() != null) {
+            textLanguage.setText(container.getOriginalLanguage());
         }
         Log.v(TAG, " overview '" + container.getPlot() +"'");
         if (StringUtils.isBlank(container.getPlot())) {
@@ -467,6 +507,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 values.put(COLUMN_VOTE_AVERAGE, container.getVoteaverage());
                 values.put(COLUMN_YEAR, container.getYear());
                 values.put(COLUMN_BACKGROUND_PATH, container.getbackgroundPath());
+                values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
                 getActivity().getContentResolver().insert(URI, values);
                 markAsFavButton.setVisibility(View.GONE);
                 deleteFromFavButton.setVisibility(View.VISIBLE);
@@ -542,7 +583,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (jObj != null) {
                 try {
 
-                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"));
+                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"), getString(jObj, "original_language"));
                     populateDetailsViewData(detailDatas);
 
                 } catch (JSONException e) {
@@ -551,12 +592,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
             } else {
 
-                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE, COLUMN_BACKGROUND_PATH}, null, null, null);
+                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE, COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE}, null, null, null);
                 Log.d(TAG, "Cursor = " + cursor.getCount());
                 if (cursor.getCount() != 0) {
 
                     cursor.moveToFirst();
-                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5), cursor.getString(6));
+                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5), cursor.getString(6), cursor.getString(7));
                     populateDetailsViewData(detailDatas);
                 }
 
@@ -595,7 +636,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     }
 
     private class FetchReviewMovieTask extends AsyncTask<Integer, Void, JSONObject> {
-        private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
@@ -623,6 +663,38 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         }
     }
+
+    private class FetchCastMovieTask extends AsyncTask<Integer, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(Integer... params) {
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/cast");
+
+            return jObj;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jObj) {
+            super.onPostExecute(jObj);
+            if (jObj != null) {
+                castData = new ArrayList<CastData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("results");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+
+
+                        reviewData.add(new ReviewData(object.getString("author"), object.getString("content")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateReviewList(reviewData, isReviewShown);
+            }
+
+        }
+    }
+
 
     private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {

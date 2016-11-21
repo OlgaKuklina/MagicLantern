@@ -10,14 +10,16 @@ public class MovieDataContainer extends MovieData {
     public final Integer duration;
     public final Double voteaverage;
     public final String backdrop_path;
+    public final String original_language;
 
-    public MovieDataContainer(String moviePoster, int movieId, String title, String plot, String year, Integer duration, Double voteaverage, String backgroundPath) {
+    public MovieDataContainer(String moviePoster, int movieId, String title, String plot, String year, Integer duration, Double voteaverage, String backgroundPath, String originalLanguage) {
         super(moviePoster, movieId, title);
         this.plot = plot;
         this.year = year;
         this.duration = duration;
         this.voteaverage = voteaverage;
         this.backdrop_path = backgroundPath;
+        this.original_language = originalLanguage;
 
     }
 
@@ -40,5 +42,7 @@ public class MovieDataContainer extends MovieData {
     public String getbackgroundPath() {
         return backdrop_path;
     }
+
+    public String getOriginalLanguage() { return original_language; }
 
 }

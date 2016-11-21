@@ -21,6 +21,7 @@ public final class FavoriteMoviesContract {
         public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_VOTE_AVERAGE = "voteaverage";
         public static final String COLUMN_BACKGROUND_PATH = "background_path";
+        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
     }
 }
 
