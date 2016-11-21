@@ -13,6 +13,7 @@
     <color name="colorAccent">#8f2626</color>
     <color name="colorBackground">#4f8293</color>
     <color name="background_color">#FF28496B</color>
+
     <color name="textcolorPrimary">#fde4a9</color>
     <color name="textcolorSec">#8f2626</color>
     <color name="textcolorSecLight">#ffffff</color>
@@ -30,6 +31,7 @@
 
     <color name="textcolorSeqc">#FF28496B</color>
     <color name="detail_view_review_author_text_color">#FF000000</color>
+
     <color name="detail_view_star_button_color">#8f2626</color>
 
     <color name="textcolorTitler">#f1e8d7</color>

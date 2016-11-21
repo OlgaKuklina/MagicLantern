@@ -6,8 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/textcolorSec</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/detail_view_star_button_color</item>
-        <item name="android:textColorPrimary">@color/textcolorPrimary</item>
+
+        <item name="android:textColorSecondary">@color/main_view_background_color</item>
+        <item name="android:textColorPrimary">@color/nav_drawer_item_color</item>
         <item name="android:colorBackground">@color/background_color</item>
 
         <item name="android:windowTranslucentStatus">true</item>

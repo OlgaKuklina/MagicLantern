@@ -64,23 +64,29 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         Menu menu = navigationView.getMenu();
         switch (prefSortOrder) {
+            case "current.desc":
+                menu.getItem(0).setChecked(true);
+                getSupportActionBar().setTitle("In Theatres");
+                break;
             case "popularity.desc":
                 menu.getItem(1).setChecked(true);
                 getSupportActionBar().setTitle("Popular");
-                break;
-            case "upcoming":
-                menu.getItem(3).setChecked(true);
-                getSupportActionBar().setTitle("Upcoming");
                 break;
             case "top_rated":
                 menu.getItem(2).setChecked(true);
                 getSupportActionBar().setTitle("Top rated");
                 break;
-            case "current.desc":
-                menu.getItem(0).setChecked(true);
-                getSupportActionBar().setTitle("In Theatres");
+            case "favorites":
+                menu.getItem(3).setChecked(true);
+                getSupportActionBar().setTitle("Favorites");
+                break;
+            case "upcoming":
+                menu.getItem(4).setChecked(true);
+                getSupportActionBar().setTitle("Upcoming");
                 break;
         }
+        menu.getItem(5).getSubMenu().getItem(0).setEnabled(false);
+        menu.getItem(5).getSubMenu().getItem(1).setEnabled(false);
     }
 
     @Override
