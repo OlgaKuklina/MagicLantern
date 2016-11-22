@@ -84,6 +84,12 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         }
 
         sortOrder = sortOrderUpdate;
+        if (sortOrderUpdate.equals("favorites")) {
+            getActivity().findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+        }
+        else {
+            getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
+        }
 
         if (sortOrderUpdate.equals("favorites")) {
             adapter.clearData();

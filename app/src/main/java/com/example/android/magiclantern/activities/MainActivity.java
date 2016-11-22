@@ -206,16 +206,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMovieClick(int movieId) {
         Log.v(TAG, "onMovieClick movieId = " + movieId);
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.tablet_popular_movies_fragment_layout);
+        RelativeLayout layout = null;
         if (layout == null) {
             Intent intent = new Intent(this, DetailsViewUniversalActivity.class)
                     .putExtra(Intent.EXTRA_TEXT, movieId);
             startActivity(intent);
         } else {
-            DetailsViewUniversalActivityFragment fragment = (DetailsViewUniversalActivityFragment) getFragmentManager().findFragmentById(R.id.tablet_details_fragment);
-            fragment.clearState();
-            fragment.fetchMovieData(movieId);
-            layout.setVisibility(View.VISIBLE);
+//            DetailsViewUniversalActivityFragment fragment = (DetailsViewUniversalActivityFragment) getFragmentManager().findFragmentById(R.id.tablet_details_fragment);
+//            fragment.clearState();
+//            fragment.fetchMovieData(movieId);
+//            layout.setVisibility(View.VISIBLE);
 
         }
     }
