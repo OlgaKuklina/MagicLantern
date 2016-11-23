@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class FavoriteMovieCollectionProvider extends ContentProvider {
     private static final String TAG = FavoriteMovieCollectionProvider.class.getSimpleName();
-    private static final String AUTHORITY = "com.android.magiclantern.provider";
+    private static final String AUTHORITY = "com.ok.lab.magiclantern.provider";
     private FavoriteMovieCollectionDbHelper helper;
     private UriMatcher matcher;
 
