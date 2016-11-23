@@ -21,7 +21,7 @@ import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieC
 public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<MovieData>> {
 
     private static final String TAG = FetchFavoriteMovieTask.class.getSimpleName();
-    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.ok.lab.magiclantern.provider/favorite");
 
     private final String posterBaseUri;
     private final ImageAdapter adapter;

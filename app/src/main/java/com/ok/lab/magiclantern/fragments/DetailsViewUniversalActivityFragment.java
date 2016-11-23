@@ -67,7 +67,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
-    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
+    private static final Uri URI = Uri.parse("content://com.ok.lab.magiclantern.provider/favorite");
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
@@ -481,7 +481,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         if (container.getOriginalLanguage() != null) {
             textLanguage.setText(container.getOriginalLanguage());
         }
-        Log.v(TAG, " overview '" + container.getPlot() + "'");
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.ok.lab.magiclantern.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ok.lab.magiclantern.activities.PopularMoviesSettingsActivity"
+            android:name=".activities.PopularMoviesSettingsActivity"
             android:label="@string/title_popular_movies_settings_activity"
             android:parentActivityName="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity">
             <meta-data
@@ -31,32 +31,32 @@
         </activity>
 
         <provider
-            android:name="com.ok.lab.magiclantern.data.FavoriteMovieCollectionProvider"
+            android:name=".data.FavoriteMovieCollectionProvider"
             android:authorities="com.ok.lab.magiclantern.provider"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity"
+            android:name=".activities.PopularMoviesUniversalActivity"
             android:label="@string/title_activity_popular_movies_universal"
-            android:parentActivityName="com.ok.lab.magiclantern.activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ok.lab.magiclantern.activities.MainActivity" />
         </activity>
         <activity
-            android:name="com.ok.lab.magiclantern.activities.DetailsViewUniversalActivity"
+            android:name=".activities.DetailsViewUniversalActivity"
             android:label="@string/title_activity_details_view_universal"
-            android:parentActivityName="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity"
+            android:parentActivityName=".activities.PopularMoviesUniversalActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity" />
         </activity>
         <activity
-            android:name="com.ok.lab.magiclantern.activities.UpcomingMoviesViewActivity"
+            android:name=".activities.UpcomingMoviesViewActivity"
             android:label="@string/title_activity_now_playing_view"
-            android:parentActivityName="com.ok.lab.magiclantern.activities.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
