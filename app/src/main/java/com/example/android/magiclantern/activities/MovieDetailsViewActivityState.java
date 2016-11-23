@@ -31,9 +31,11 @@ public class MovieDetailsViewActivityState {
     public List<ReviewData> getReviewDatas() {
         return reviewDatas;
     }
+
     public List<CastData> getCastDatas() {
         return castDatas;
     }
+
     public MovieDataContainer getDetailDatas() {
         return detailDatas;
     }

@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 
 import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.asynctasks.OnMovieClickListener;
-import com.example.android.magiclantern.fragments.DetailsViewUniversalActivityFragment;
 import com.example.android.magiclantern.fragments.PopularMoviesUniversalActivityFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -99,28 +98,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -192,10 +169,6 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Upcoming");
         } else if (id == R.id.favorites) {
             openFavorites();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -206,18 +179,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMovieClick(int movieId) {
         Log.v(TAG, "onMovieClick movieId = " + movieId);
-        RelativeLayout layout = null;
-        if (layout == null) {
+
             Intent intent = new Intent(this, DetailsViewUniversalActivity.class)
                     .putExtra(Intent.EXTRA_TEXT, movieId);
             startActivity(intent);
-        } else {
-//            DetailsViewUniversalActivityFragment fragment = (DetailsViewUniversalActivityFragment) getFragmentManager().findFragmentById(R.id.tablet_details_fragment);
-//            fragment.clearState();
-//            fragment.fetchMovieData(movieId);
-//            layout.setVisibility(View.VISIBLE);
 
-        }
     }
 
     protected void openFavorites() {

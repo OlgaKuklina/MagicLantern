@@ -43,6 +43,8 @@ public class MovieDataContainer extends MovieData {
         return backdrop_path;
     }
 
-    public String getOriginalLanguage() { return original_language; }
+    public String getOriginalLanguage() {
+        return original_language;
+    }
 
 }
