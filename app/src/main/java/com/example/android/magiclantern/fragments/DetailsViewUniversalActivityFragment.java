@@ -59,7 +59,6 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.example.android.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
-import static com.example.android.magiclantern.utils.DeveloperKey.DEVELOPER_KEY;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -240,7 +239,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         isTrailerLoaded = true;
 
         if (data != null && !data.isEmpty()) {
-            youTubePlayerFragment.initialize(DEVELOPER_KEY, this);
+            youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
         } else {
             getView().findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
             getView().findViewById(R.id.movie_trailers).setVisibility(View.GONE);
@@ -608,7 +607,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
-            JSONObject jObj = JSONLoader.load("/movie/" + params[0]);
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0], getString(R.string.THE_MOVIE_DB_API_TOKEN));
 
             return jObj;
         }
@@ -646,7 +645,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
-            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/videos");
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/videos", getString(R.string.THE_MOVIE_DB_API_TOKEN));
 
             return jObj;
         }
@@ -675,7 +674,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
-            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/reviews");
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/reviews", getString(R.string.THE_MOVIE_DB_API_TOKEN));
 
             return jObj;
         }
@@ -704,7 +703,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
-            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/credits");
+            JSONObject jObj = JSONLoader.load("/movie/" + params[0] + "/credits", getString(R.string.THE_MOVIE_DB_API_TOKEN));
 
             return jObj;
         }
@@ -742,7 +741,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         public Fragment getItem(int position) {
             Log.v(TAG, " ScreenSlidePagerAdapter YouTubePlayerFragment");
             YouTubePlayerFragment trailersFragment = YouTubePlayerFragment.newInstance();
-            trailersFragment.initialize(DEVELOPER_KEY, DetailsViewUniversalActivityFragment.this);
+            trailersFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), DetailsViewUniversalActivityFragment.this);
             return trailersFragment;
         }
 

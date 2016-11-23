@@ -16,8 +16,9 @@ import com.example.android.magiclantern.R;
 
 public class UpcomingMoviesViewActivity extends MainActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String SHARED_PREF_NAME = "com.example.android.magiclantern.magic.lantern";
     private static final String TAG = UpcomingMoviesViewActivity.class.getSimpleName();
+    private static final String SHARED_PREF_NAME = "com.example.android.magiclantern.magic.lantern";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,7 @@ package com.example.android.magiclantern.asynctasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.android.magiclantern.R;
 import com.example.android.magiclantern.adapters.ImageAdapter;
 import com.example.android.magiclantern.data.MovieData;
 import com.example.android.magiclantern.utils.JSONLoader;
@@ -17,14 +18,18 @@ import java.util.ArrayList;
  * Created by olgakuklina on 2015-11-14.
  */
 public class FetchUpcomingMovieTask extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-    private static final String TAG = FetchUpcomingMovieTask.class.getSimpleName();
-    private final ImageAdapter adapter;
-    private final FetchMovieListener fetchMovieListener;
 
-    public FetchUpcomingMovieTask(ImageAdapter adapter, FetchMovieListener fetchMovieListener) {
+    private static final String TAG = FetchUpcomingMovieTask.class.getSimpleName();
+    private final FetchMovieListener fetchMovieListener;
+    private final ImageAdapter adapter;
+    private final String posterBaseUri;
+    private final String apiKey;
+
+    public FetchUpcomingMovieTask(ImageAdapter adapter, FetchMovieListener fetchMovieListener, String apiKey, String posterBaseUri) {
         this.adapter = adapter;
         this.fetchMovieListener = fetchMovieListener;
+        this.posterBaseUri = posterBaseUri;
+        this.apiKey = apiKey;
     }
 
     @Override
@@ -39,33 +44,26 @@ public class FetchUpcomingMovieTask extends AsyncTask<Integer, Void, ArrayList<M
         } else {
             fetchMovieListener.onFetchFailed();
         }
-
     }
-
 
     @Override
     protected ArrayList<MovieData> doInBackground(Integer... params) {
         ArrayList<MovieData> moviePosters = new ArrayList<>();
         try {
-
-            JSONObject jObj = JSONLoader.load("/movie/upcoming" + "?page=" + params[0]);
+            JSONObject jObj = JSONLoader.load("/movie/upcoming" + "?page=" + params[0], apiKey);
             if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
             }
-            Log.v(TAG, "page:" + jObj.getInt("page") + "params[0] =" + params[0]);
             JSONArray movieArray = jObj.getJSONArray("results");
-            Log.v(TAG, "length:" + movieArray.length());
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.optJSONObject(i);
                 String moviePoster = movie.getString("poster_path");
                 int movieId = movie.getInt("id");
                 String movieTitle = movie.getString("title");
-                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, movieTitle);
+                MovieData data = new MovieData(posterBaseUri + moviePoster, movieId, movieTitle);
                 moviePosters.add(data);
-                Log.v(TAG, "moviePoster = " + moviePoster);
             }
-
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
         }

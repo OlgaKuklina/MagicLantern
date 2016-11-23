@@ -32,12 +32,13 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
 
     private static final String TAG = PopularMoviesUniversalActivityFragment.class.getSimpleName();
     private static final String SHARED_PREF_NAME = "com.example.android.magiclantern.magic.lantern";
+
     private ImageAdapter adapter;
     private String sortOrder;
     private GridView gridview;
+    private String apiKey;
+    private String posterBaseUri;
 
-    public PopularMoviesUniversalActivityFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
             });
         }
         gridview.setAdapter(adapter);
+        posterBaseUri = getString(R.string.poster_base_uri);
+        apiKey = getString(R.string.THE_MOVIE_DB_API_TOKEN);
         return view;
     }
 
@@ -72,10 +75,8 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
         String sortOrderUpdate;
         sortOrderUpdate = prefs.getString("pref_sorting", getString(R.string.pref_sort_default));
-        Log.d(TAG, "sortOrderUpdate = " + sortOrderUpdate + ", sortOrder = " + sortOrder);
 
         boolean isConnected = checkInternetConnection();
-        Log.v(TAG, "Network is" + isConnected);
         if (!isConnected && !sortOrderUpdate.equals("favorites")) {
             Log.e(TAG, "Network is not available");
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), R.string.network_not_available_message, Toast.LENGTH_LONG);
@@ -92,10 +93,9 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
 
         if (sortOrderUpdate.equals("favorites")) {
             adapter.clearData();
-            FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver());
+            FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
             task.execute();
         } else if (sortOrderUpdate.equals("current.desc")) {
-
             gridview.setOnScrollListener(new NowPlayingMovieViewScrollListener());
         } else if (sortOrder.equals("top_rated")) {
             gridview.setOnScrollListener(new TopRatedMovieViewScrollListener());
@@ -114,7 +114,6 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
         return isConnected;
     }
 
@@ -122,7 +121,6 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         private static final int PAGE_SIZE = 20;
         private boolean loadingState = false;
 
-
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -133,15 +131,12 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchMovieTask fetchMovieTask = new FetchMovieTask(adapter, sortOrder, this);
+                    FetchMovieTask fetchMovieTask = new FetchMovieTask(adapter, sortOrder, this, apiKey, posterBaseUri);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
-
                 }
             }
-
         }
-
 
         @Override
         public void onFetchCompleted() {
@@ -151,19 +146,16 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         @Override
         public void onFetchFailed() {
             loadingState = false;
-            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_conection_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_connection_error, Toast.LENGTH_LONG).show();
         }
     }
-
 
     private class TopRatedMovieViewScrollListener implements AbsListView.OnScrollListener, FetchMovieListener {
         private static final int PAGE_SIZE = 20;
         private boolean loadingState = false;
 
-
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-
         }
 
         @Override
@@ -171,15 +163,12 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchTopRated fetchTopRated = new FetchTopRated(adapter, this);
+                    FetchTopRated fetchTopRated = new FetchTopRated(adapter, this, apiKey, posterBaseUri);
                     fetchTopRated.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
-
                 }
             }
-
         }
-
 
         @Override
         public void onFetchCompleted() {
@@ -189,7 +178,7 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         @Override
         public void onFetchFailed() {
             loadingState = false;
-            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_conection_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_connection_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -197,37 +186,30 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
         private static final int PAGE_SIZE = 20;
         private boolean loadingState = false;
 
-
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-
         }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                 if (!loadingState) {
-                    Log.v(TAG, "onScroll = " + firstVisibleItem + "," + visibleItemCount + "," + totalItemCount);
                     loadingState = true;
-                    FetchNowPlaying fetchMovieTask = new FetchNowPlaying(adapter, this);
+                    FetchNowPlaying fetchMovieTask = new FetchNowPlaying(adapter, this, apiKey, posterBaseUri);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
-                    Log.v(TAG, "totalItemCount = " + totalItemCount);
-
                 }
             }
-
         }
 
         @Override
         public void onFetchCompleted() {
             loadingState = false;
-            Log.v(TAG, "onFetchCompleted = " + loadingState);
         }
 
         @Override
         public void onFetchFailed() {
             loadingState = false;
-            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_conection_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_connection_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -238,7 +220,6 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
 
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-
         }
 
         @Override
@@ -246,25 +227,22 @@ public class PopularMoviesUniversalActivityFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchUpcomingMovieTask fetchMovieTask = new FetchUpcomingMovieTask(adapter, this);
+                    FetchUpcomingMovieTask fetchMovieTask = new FetchUpcomingMovieTask(adapter, this, apiKey, posterBaseUri);
                     fetchMovieTask.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
-
                 }
             }
-
         }
 
         @Override
         public void onFetchCompleted() {
             loadingState = false;
-
         }
 
         @Override
         public void onFetchFailed() {
             loadingState = false;
-            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_conection_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.popular_movies_activity_text_connection_error, Toast.LENGTH_LONG).show();
         }
     }
 }

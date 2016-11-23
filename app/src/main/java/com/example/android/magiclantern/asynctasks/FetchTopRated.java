@@ -17,14 +17,19 @@ import java.util.ArrayList;
  * Created by olgakuklina on 2015-11-14.
  */
 public class FetchTopRated extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-    private static final String TAG = FetchTopRated.class.getSimpleName();
-    private final ImageAdapter adapter;
-    private final FetchMovieListener fetchMovieListener;
 
-    public FetchTopRated(ImageAdapter adapter, FetchMovieListener fetchMovieListener) {
-        this.adapter = adapter;
+    private static final String TAG = FetchTopRated.class.getSimpleName();
+
+    private final FetchMovieListener fetchMovieListener;
+    private  final String posterBaseUri;
+    private final ImageAdapter adapter;
+    private final String apiKey;
+
+    public FetchTopRated(ImageAdapter adapter, FetchMovieListener fetchMovieListener, String apiKey, String posterBaseUri) {
         this.fetchMovieListener = fetchMovieListener;
+        this.posterBaseUri = posterBaseUri;
+        this.adapter = adapter;
+        this.apiKey = apiKey;
     }
 
     @Override
@@ -39,32 +44,26 @@ public class FetchTopRated extends AsyncTask<Integer, Void, ArrayList<MovieData>
         } else {
             fetchMovieListener.onFetchFailed();
         }
-
     }
 
     @Override
     protected ArrayList<MovieData> doInBackground(Integer... params) {
         ArrayList<MovieData> moviePosters = new ArrayList<>();
         try {
-
-            JSONObject jObj = JSONLoader.load("/movie/top_rated" + "?page=" + params[0]);
+            JSONObject jObj = JSONLoader.load("/movie/top_rated" + "?page=" + params[0], apiKey);
             if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
             }
-            Log.v(TAG, "page:" + jObj.getInt("page") + "params[0] =" + params[0]);
             JSONArray movieArray = jObj.getJSONArray("results");
-            Log.v(TAG, "length:" + movieArray.length());
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.optJSONObject(i);
                 String moviePoster = movie.getString("poster_path");
                 int movieId = movie.getInt("id");
                 String movieTitle = movie.getString("title");
-                MovieData data = new MovieData(POSTER_BASE_URI + moviePoster, movieId, movieTitle);
+                MovieData data = new MovieData(posterBaseUri + moviePoster, movieId, movieTitle);
                 moviePosters.add(data);
-                Log.v(TAG, "moviePoster = " + moviePoster);
             }
-
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
         }

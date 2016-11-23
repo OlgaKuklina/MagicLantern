@@ -17,17 +17,16 @@ import java.net.URL;
  * Created by olgakuklina on 2015-08-30.
  */
 public class JSONLoader {
-    private static final String APP_KEY = "56ffc7a4ba3f6d96ffda5581e83aebce";
     private static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3";
     private static final String TAG = JSONLoader.class.getSimpleName();
 
-    public static JSONObject load(String relativeUri) {
+    public static JSONObject load(String relativeUri, String apiKey) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String movieJsonStr = null;
         try {
             Uri builtUri = Uri.parse(MOVIE_BASE_URI + relativeUri).buildUpon()
-                    .appendQueryParameter("api_key", APP_KEY).build();
+                    .appendQueryParameter("api_key", apiKey).build();
             URL url = new URL(builtUri.toString());
             Log.v(TAG, "Built URI " + builtUri.toString());
 

@@ -19,38 +19,34 @@ import static com.example.android.magiclantern.data.FavoriteMoviesContract.Favor
  * Created by olgakuklina on 2015-09-10.
  */
 public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<MovieData>> {
-    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
     private static final String TAG = FetchFavoriteMovieTask.class.getSimpleName();
+    private static final Uri URI = Uri.parse("content://com.android.magiclantern.provider/favorite");
+
+    private final String posterBaseUri;
     private final ImageAdapter adapter;
     private final ContentResolver contentResolver;
 
-    public FetchFavoriteMovieTask(ImageAdapter adapter, ContentResolver contentResolver) {
+    public FetchFavoriteMovieTask(ImageAdapter adapter, ContentResolver contentResolver, String posterBaseUri) {
         this.adapter = adapter;
         this.contentResolver = contentResolver;
+        this.posterBaseUri = posterBaseUri;
     }
 
     @Override
     protected ArrayList<MovieData> doInBackground(Void... params) {
         ArrayList<MovieData> moviePosters = new ArrayList<>();
-
         final Cursor cursor = contentResolver.query(URI, new String[]{COLUMN_NAME_MOVIE_ID, COLUMN_POSTER_PATH, COLUMN_NAME_TITLE}, null, null, null);
 
         if (cursor != null && cursor.getCount() != 0) {
-            Log.d(TAG, "Cursor = " + cursor.getCount());
             while (cursor.moveToNext()) {
-                MovieData data = new MovieData(POSTER_BASE_URI + cursor.getString(1), cursor.getInt(0), cursor.getString(2));
+                MovieData data = new MovieData(posterBaseUri + cursor.getString(1), cursor.getInt(0), cursor.getString(2));
                 moviePosters.add(data);
-                Log.v(TAG, "moviePoster = " + data);
             }
-
         } else {
             Log.d(TAG, "Cursor is empty");
         }
-
         return moviePosters;
-
     }
 
     @Override
@@ -58,12 +54,10 @@ public class FetchFavoriteMovieTask extends AsyncTask<Void, Void, ArrayList<Movi
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
             for (MovieData res : moviePosters) {
-                Log.v(TAG, "onPostExecute ");
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
         }
-
     }
 }
 
