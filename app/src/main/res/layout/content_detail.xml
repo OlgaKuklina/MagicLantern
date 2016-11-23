@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.DetailsViewUniversalActivity"
+    tools:context="com.ok.lab.magiclantern.activities.DetailsViewUniversalActivity"
     tools:showIn="@layout/app_bar_detail">
 
 
@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
 
         android:id="@+id/fragment"
-        android:name="com.example.android.magiclantern.fragments.DetailsViewUniversalActivityFragment"
+        android:name="com.ok.lab.magiclantern.fragments.DetailsViewUniversalActivityFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_details_view_universal" />
