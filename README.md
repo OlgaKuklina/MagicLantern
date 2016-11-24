@@ -6,9 +6,10 @@
 
 ##Overview
 MagicLantern is an application designed as a projector in the cinema industry. Take an adventure discovering the collection of movies, production details and audience reviews.
+###
 The magic lantern [laterna magica] is an early type of image projector. It is not only a direct ancestor of the motion picture projector as a means for visual storytelling, nonetheless it could itself be used to project moving images. The history of magic lantern refer us to ancient Greeks. It’s known that Leonardo da Vinci in the 16th century experimented with projection, with no evidence of creating a first working projector though. Then in 17th century a few scientists were developing projection devices at about the same time. Magicians as well as entertainers were the first who found the practical usage for projection devices as objects to create fantastic illusions in their performances.
 
-###Explore and search:
+###Explore and search
 
 - Enjoy a variety of movie trailers 
 
