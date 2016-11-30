@@ -18,6 +18,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
@@ -495,7 +497,19 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             movieVoteAverage.setVisibility(View.GONE);
         }
         if (container.getOriginalLanguage() != null) {
-            textLanguage.setText(container.getOriginalLanguage());
+            String name = "";
+            Locale[] locales = Locale.getAvailableLocales();
+            for (Locale l : locales) {
+                if (l.getLanguage().equals(container.getOriginalLanguage())) {
+                     name = l.getDisplayLanguage();
+                }
+            }
+            if(name.isEmpty()) {
+                textLanguage.setText(container.getOriginalLanguage());
+            }
+            else {
+                textLanguage.setText(name);
+            }
             textLanguage.setVisibility(View.VISIBLE);
         }
         else {
