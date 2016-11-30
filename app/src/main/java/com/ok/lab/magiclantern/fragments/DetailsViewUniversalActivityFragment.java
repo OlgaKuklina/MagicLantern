@@ -48,15 +48,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
+import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_GENRES;
+import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_IMDB_ID;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
+import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_COUNTRIES;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_LANGUAGE;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
+import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_PROD_COMPANIES;
+import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_STATUS;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
 
@@ -68,6 +74,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
     private static final String TAG = DetailsViewUniversalActivityFragment.class.getSimpleName();
     private static final Uri URI = Uri.parse("content://com.ok.lab.magiclantern.provider/favorite");
+    private static final String IMDB_URI = "http://www.imdb.com/title";
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
@@ -97,6 +104,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment
     private LinearLayout rating;
     private TextView textRating;
     private TextView textLanguage;
+    private TextView textStatus;
+    private TextView textProdCompanies;
+    private TextView textGenres;
+    private TextView textCountries;
+    private TextView textIMDbId;
     private ImageView starRating;
     private Intent sharedIntent;
     private MenuItem item;
@@ -142,7 +154,11 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         markAsFavButton = (ImageButton) view.findViewById(R.id.mark_as_fav_button);
         deleteFromFavButton = (ImageButton) view.findViewById(R.id.delete_from_fav_button);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
-
+        textStatus = (TextView) view.findViewById(R.id.status);
+        textProdCompanies = (TextView) view.findViewById(R.id.prod_companies);
+        textGenres = (TextView) view.findViewById(R.id.genre);
+        textCountries = (TextView) view.findViewById(R.id.countries);
+        textIMDbId = (TextView) view.findViewById(R.id.imdb_id);
         isTrailerLoaded = false;
         item = null;
 
@@ -473,13 +489,77 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         } else {
             movieDuration.setVisibility(View.GONE);
         }
-        if (container.getVoteaverage() != null) {
-            textRating.setText(container.getVoteaverage() + getString(R.string.details_view_text_vote_average_divider));
+        if (container.getVote_average() != null) {
+            textRating.setText(container.getVote_average() + getString(R.string.details_view_text_vote_average_divider));
         } else {
             movieVoteAverage.setVisibility(View.GONE);
         }
         if (container.getOriginalLanguage() != null) {
             textLanguage.setText(container.getOriginalLanguage());
+            textLanguage.setVisibility(View.VISIBLE);
+        }
+        else {
+            textLanguage.setVisibility(View.GONE);
+        }
+        if (container.getStatus() != null) {
+            textStatus.setText(container.getStatus());
+            textStatus.setVisibility(View.VISIBLE);
+        }
+        else {
+            textStatus.setVisibility(View.GONE);
+        }
+        if(!container.getGenres().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String genre: container.getGenres() ) {
+                builder.append(genre);
+                builder.append("/");
+            }
+            builder.deleteCharAt(builder.length()-1);
+            textGenres.setText(builder.toString());
+            textGenres.setVisibility(View.VISIBLE);
+        }
+        else{
+            textGenres.setVisibility(View.GONE);
+        }
+        if(!container.getOriginalCountries().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String country: container.getOriginalCountries() ) {
+                builder.append(country);
+                builder.append("/");
+            }
+            builder.deleteCharAt(builder.length()-1);
+            textCountries.setText(builder.toString());
+            textCountries.setVisibility(View.VISIBLE);
+        }
+        else{
+            textCountries.setVisibility(View.GONE);
+        }
+        if(!container.getProduction_companies().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String podCompany: container.getProduction_companies() ) {
+                builder.append(podCompany);
+                builder.append("/");
+            }
+            builder.deleteCharAt(builder.length()-1);
+            textProdCompanies.setText(builder.toString());
+            textProdCompanies.setVisibility(View.VISIBLE);
+        }
+        else{
+            textProdCompanies.setVisibility(View.GONE);
+        }
+
+        if(container.getImdb_uri() != null  && container.getImdb_uri().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+
+                builder.append(IMDB_URI);
+                builder.append("/");
+                builder.append(container.getImdb_uri());
+
+            textIMDbId.setText(builder.toString());
+            textIMDbId.setVisibility(View.VISIBLE);
+        }
+        else{
+            textIMDbId.setVisibility(View.GONE);
         }
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
@@ -528,7 +608,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 values.put(COLUMN_MOVIE_PLOT, container.getPlot());
                 values.put(COLUMN_NAME_TITLE, container.getTitle());
                 values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
-                values.put(COLUMN_VOTE_AVERAGE, container.getVoteaverage());
+                values.put(COLUMN_VOTE_AVERAGE, container.getVote_average());
                 values.put(COLUMN_YEAR, container.getYear());
                 values.put(COLUMN_BACKGROUND_PATH, container.getbackgroundPath());
                 values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
@@ -598,6 +678,29 @@ public class DetailsViewUniversalActivityFragment extends Fragment
         }
     }
 
+    private List<String> getList(JSONObject jobj, String name) throws JSONException {
+        if (jobj.isNull(name)) {
+            return Collections.emptyList();
+        } else {
+            JSONArray jArray = jobj.getJSONArray(name);
+            List<String> results = new ArrayList<>(jArray.length());
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject Jobject = jArray.getJSONObject(i);
+                results.add(Jobject.getString("name"));
+            }
+            return results;
+        }
+    }
+
+
+    private String getUri(JSONObject jobj, String name) throws JSONException {
+        if (jobj.isNull(name)) {
+            return null;
+        } else {
+            return IMDB_URI + jobj.getString("imdb_id");
+        }
+    }
+
     public List<TrailerData> getTrailerData() {
         return trailerData;
     }
@@ -617,7 +720,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (jObj != null) {
                 try {
 
-                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"), getString(jObj, "original_language"));
+                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"), getString(jObj, "original_language"), getList(jObj, "production_countries"), getList(jObj, "genres"), getString(jObj, "status"), getUri(jObj, "imdb_uri"), getList(jObj, "production_companies"));
                     populateDetailsViewData(detailDatas);
 
                 } catch (JSONException e) {
@@ -626,12 +729,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
             } else {
 
-                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE, COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE}, null, null, null);
+                final Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(URI, id), new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT, COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE, COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE, COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES, COLUMN_STATUS, COLUMN_IMDB_ID, COLUMN_PROD_COMPANIES}, null, null, null);
                 Log.d(TAG, "Cursor = " + cursor.getCount());
                 if (cursor.getCount() != 0) {
 
                     cursor.moveToFirst();
-                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5), cursor.getString(6), cursor.getString(7));
+                    detailDatas = new MovieDataContainer(cursor.getString(4), id, cursor.getString(3), cursor.getString(2), cursor.getString(1), cursor.getInt(0), cursor.getDouble(5), cursor.getString(6), cursor.getString(7), Collections.<String>emptyList(), Collections.<String>emptyList(), cursor.getString(10), cursor.getString(11), Collections.<String>emptyList());
                     populateDetailsViewData(detailDatas);
                 }
 

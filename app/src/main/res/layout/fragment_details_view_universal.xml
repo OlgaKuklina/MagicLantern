@@ -42,6 +42,14 @@
                 android:layout_marginLeft="5dp"
                 android:gravity="center_vertical" />
 
+            <TextView
+                android:id="@+id/imdb_text_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:text="imdb_raiting"
+                android:gravity="center_vertical" />
+
         </LinearLayout>
 
         <TextView
@@ -97,11 +105,19 @@
                         android:paddingTop="@dimen/detail_text_view_movie_date_paddingTop"
                         android:textSize="@dimen/detail_text_view_movie_date_text_size" />
 
+                        <TextView
+                            style="@style/DetailViewText"
+                            android:id="@+id/prod_companies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="22dp"
+                            android:gravity="center_vertical"
+                            android:text="Prod Companies" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/detail_text_view_movie_duration_paddingTop">
+                        android:orientation="horizontal">
 
                         <TextView
                             style="@style/DetailViewText"
@@ -109,7 +125,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="22dp"
                             android:gravity="center_vertical"
-                            android:text="Language: " />
+                            android:text="Language " />
 
                         <TextView
                             android:id="@+id/text_language"
@@ -118,7 +134,48 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
                             android:gravity="center_vertical" />
+
                     </LinearLayout>
+
+
+                        <TextView
+                            style="@style/DetailViewText"
+                            android:id="@+id/genre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="22dp"
+                            android:gravity="center_vertical"
+                            android:text="Genre " />
+
+
+                        <TextView
+                            style="@style/DetailViewText"
+                            android:id="@+id/countries"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="22dp"
+                            android:gravity="center_vertical"
+                            android:text="Countries " />
+
+                    <TextView
+                        style="@style/DetailViewText"
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="22dp"
+                        android:gravity="center_vertical"
+                        android:text="Status "
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/DetailViewText"
+                        android:id="@+id/imdb_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="22dp"
+                        android:gravity="center_vertical"
+                        android:text="imdb_id "
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/movie_duration"
@@ -130,13 +187,14 @@
                         android:text="movie duration"
                         android:textSize="@dimen/detail_text_view_movie_duration_text_size" />
 
+
                     <ImageButton
                         android:id="@+id/mark_as_fav_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
                         android:background="@drawable/touch_effect"
+                        android:paddingTop="@dimen/detail_text_view_movie_duration_paddingTop"
                         android:src="@drawable/ic_anchor_48"
                         android:visibility="gone" />
 
@@ -145,13 +203,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
                         android:background="@drawable/touch_effect"
+                        android:paddingTop="@dimen/detail_text_view_movie_duration_paddingTop"
                         android:src="@drawable/anchor_fav_48dp"
                         android:visibility="gone" />
 
                 </LinearLayout>
+
             </LinearLayout>
+
         </RelativeLayout>
 
         <LinearLayout

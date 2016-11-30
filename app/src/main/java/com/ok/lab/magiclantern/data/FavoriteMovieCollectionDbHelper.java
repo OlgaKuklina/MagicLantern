@@ -17,7 +17,7 @@ public class FavoriteMovieCollectionDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE favorite (_id INTEGER PRIMARY KEY, movieid INTEGER, title TEXT, movieplot TEXT, path TEXT, year TEXT, duration INTEGER, voteaverage REAL, background_path TEXT, original_language TEXT)");
+        db.execSQL("CREATE TABLE favorite (_id INTEGER PRIMARY KEY, movieid INTEGER, title TEXT, movieplot TEXT, path TEXT, year TEXT, duration INTEGER, vote_average REAL, background_path TEXT, original_language TEXT)");
     }
 
     @Override

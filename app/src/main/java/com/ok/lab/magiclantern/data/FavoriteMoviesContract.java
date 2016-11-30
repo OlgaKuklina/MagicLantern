@@ -19,9 +19,14 @@ public final class FavoriteMoviesContract {
         public static final String COLUMN_POSTER_PATH = "path";
         public static final String COLUMN_YEAR = "year";
         public static final String COLUMN_DURATION = "duration";
-        public static final String COLUMN_VOTE_AVERAGE = "voteaverage";
+        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_BACKGROUND_PATH = "background_path";
         public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
+        public static final String COLUMN_ORIGINAL_COUNTRIES = "original_countries";
+        public static final String COLUMN_PROD_COMPANIES = "production_companies";
+        public static final String COLUMN_GENRES = "genres";
+        public static final String COLUMN_STATUS = "status";
+        public static final String COLUMN_IMDB_ID = "imdb_id";
     }
 }
 

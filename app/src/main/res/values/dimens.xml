@@ -21,9 +21,9 @@
     <dimen name="detail_view_backgroun_poster_min_height">200dp</dimen>
     <dimen name="detail_view_youtube_fragment_padding">15dp</dimen>
     <dimen name="detail_view_title_text_size">25sp</dimen>
-    <dimen name="detail_view_image_layout_width">120dp</dimen>
+    <dimen name="detail_view_image_layout_width">130dp</dimen>
 
-    <dimen name="detail_view_image_layout_height">185dp</dimen>
+    <dimen name="detail_view_image_layout_height">200dp</dimen>
     <dimen name="detail_view_image_layout_marginTop">10dp</dimen>
     <dimen name="detail_view_image_layout_marginLeft">20dp</dimen>
 
@@ -32,8 +32,8 @@
     <dimen name="detail_text_view_movie_date_paddingTop">10dp</dimen>
     <dimen name="detail_text_view_movie_date_layout_marginLeft">20dp</dimen>
 
-    <dimen name="detail_text_view_movie_duration_text_size">20sp</dimen>
-    <dimen name="detail_text_view_movie_duration_paddingTop">10dp</dimen>
+    <dimen name="detail_text_view_movie_duration_text_size">18sp</dimen>
+    <dimen name="detail_text_view_movie_duration_paddingTop">5dp</dimen>
     <dimen name="detail_text_view_movie_duration_layout_marginLeft">20dp</dimen>
 
     <dimen name="detail_text_view_vote_average_text_size">15sp</dimen>
