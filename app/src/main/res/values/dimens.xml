@@ -30,6 +30,7 @@
 
     <dimen name="detail_text_view_movie_date_text_size">15sp</dimen>
     <dimen name="detail_text_view_movie_date_paddingTop">10dp</dimen>
+    <dimen name="detail_text_view_movie_date_paddingBottom">5dp</dimen>
     <dimen name="detail_text_view_movie_date_layout_marginLeft">20dp</dimen>
 
     <dimen name="detail_text_view_movie_duration_text_size">18sp</dimen>

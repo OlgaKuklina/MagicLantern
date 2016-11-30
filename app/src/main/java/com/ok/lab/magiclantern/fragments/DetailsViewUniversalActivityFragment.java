@@ -512,9 +512,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             StringBuilder builder = new StringBuilder();
             for(String genre: container.getGenres() ) {
                 builder.append(genre);
-                builder.append("/");
+                builder.append(" | ");
             }
-            builder.deleteCharAt(builder.length()-1);
+            builder.delete(builder.length()-3, builder.length());
             textGenres.setText(builder.toString());
             textGenres.setVisibility(View.VISIBLE);
         }
@@ -525,9 +525,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             StringBuilder builder = new StringBuilder();
             for(String country: container.getOriginalCountries() ) {
                 builder.append(country);
-                builder.append("/");
+                builder.append(" | ");
             }
-            builder.deleteCharAt(builder.length()-1);
+            builder.delete(builder.length()-3, builder.length());
             textCountries.setText(builder.toString());
             textCountries.setVisibility(View.VISIBLE);
         }
@@ -538,9 +538,9 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             StringBuilder builder = new StringBuilder();
             for(String podCompany: container.getProduction_companies() ) {
                 builder.append(podCompany);
-                builder.append("/");
+                builder.append(" | ");
             }
-            builder.deleteCharAt(builder.length()-1);
+            builder.delete(builder.length()-3, builder.length());
             textProdCompanies.setText(builder.toString());
             textProdCompanies.setVisibility(View.VISIBLE);
         }
@@ -580,20 +580,22 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 if (StringUtils.isBlank(container.getPlot())) {
                     moviePlot.setText(R.string.details_view_no_description);
                 }
-                Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
-                if (isSeeMore) {
-                    String string = container.getPlot();
-                    moviePlot.setText(Html.fromHtml(string + LONG_TEXT_PREVIEW));
-                } else {
-                    if (container.getPlot().length() > 80) {
-                        moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
-                    } else {
+                else {
+                    Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
+                    if (isSeeMore) {
                         String string = container.getPlot();
-                        moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                        moviePlot.setText(Html.fromHtml(string + LONG_TEXT_PREVIEW));
+                    } else {
+                        if (container.getPlot().length() > 80) {
+                            moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+                        } else {
+                            String string = container.getPlot();
+                            moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                        }
                     }
-                }
 
-                isSeeMore = !isSeeMore;
+                    isSeeMore = !isSeeMore;
+                }
             }
         });
 
