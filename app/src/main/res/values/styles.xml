@@ -56,6 +56,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">15dp</item>
     </style>
+
     <style name="DetailViewTextSmall">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textColor">@color/textcolor</item>

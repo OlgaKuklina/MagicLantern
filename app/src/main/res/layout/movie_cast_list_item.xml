@@ -3,6 +3,7 @@
     android:id="@+id/cast_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/touch_effect"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="@dimen/detail_text_view_review_list_item_minSize"

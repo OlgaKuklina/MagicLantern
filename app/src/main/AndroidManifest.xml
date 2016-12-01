@@ -24,7 +24,7 @@
         <activity
             android:name=".activities.PopularMoviesSettingsActivity"
             android:label="@string/title_popular_movies_settings_activity"
-            android:parentActivityName="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity">
+            android:parentActivityName=".activities.PopularMoviesUniversalActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ok.lab.magiclantern.activities.PopularMoviesUniversalActivity" />
@@ -61,6 +61,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ok.lab.magiclantern.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.PersonalProfileActivity"
+            android:label="@string/title_activity_personal_profile"
+            android:parentActivityName=".activities.DetailsViewUniversalActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ok.lab.magiclantern.activities.DetailsViewUniversalActivity" />
         </activity>
     </application>
 
