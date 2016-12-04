@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:minHeight="@dimen/personal_profile_movies_list_item_minSize"
+    android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/movie_name"
+            style="@style/DetailViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="movie_title" />
+
+        <TextView
+            android:id="@+id/movie_release_date"
+            style="@style/DetailViewSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="release date" />
+
+        <ImageView
+            android:id="@+id/p_movie_poster"
+            android:layout_width="@dimen/detail_view_image_layout_width"
+            android:layout_height="@dimen/detail_view_image_layout_height"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/detail_view_image_layout_marginLeft"
+            android:layout_marginTop="@dimen/detail_view_image_layout_marginTop"
+            android:src="@drawable/no_movie_poster" />
+</LinearLayout>

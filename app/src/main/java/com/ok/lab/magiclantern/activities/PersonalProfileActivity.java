@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ok.lab.magiclantern.R;
+import com.ok.lab.magiclantern.utils.Constants;
 
 public class PersonalProfileActivity extends AppCompatActivity {
 
@@ -15,9 +16,12 @@ public class PersonalProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_profile);
+
+
+        setTitle(R.string.title_activity_person_view_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        setTitle(getIntent().getStringExtra(Constants.EXTRA_PERSON_NAME));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

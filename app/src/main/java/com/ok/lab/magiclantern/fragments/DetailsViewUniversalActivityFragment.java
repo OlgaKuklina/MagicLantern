@@ -31,11 +31,14 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.ok.lab.magiclantern.R;
+import com.ok.lab.magiclantern.activities.DetailsViewUniversalActivity;
 import com.ok.lab.magiclantern.activities.MovieDetailsViewActivityState;
+import com.ok.lab.magiclantern.activities.PersonalProfileActivity;
 import com.ok.lab.magiclantern.data.CastData;
 import com.ok.lab.magiclantern.data.MovieDataContainer;
 import com.ok.lab.magiclantern.data.ReviewData;
 import com.ok.lab.magiclantern.data.TrailerData;
+import com.ok.lab.magiclantern.utils.Constants;
 import com.ok.lab.magiclantern.utils.JSONLoader;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -333,13 +336,12 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
         for (final CastData cast : data) {
             View view = getActivity().getLayoutInflater().inflate(R.layout.movie_cast_list_item, null);
+            view.setTag(cast);
             TextView castName = (TextView) view.findViewById(R.id.cast_name);
             Log.v(TAG, "cast.getCastName() " + cast.getCastName());
 
             ImageView castImage = (ImageView) view.findViewById(R.id.cast_image);
-
             TextView castCharacter = (TextView) view.findViewById(R.id.cast_charecter);
-
 
             if (cast.getCastName() == null) {
                 castImage.setVisibility(View.GONE);
@@ -363,13 +365,23 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                         .into(castImage);
 
             }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CastData data = (CastData) v.getTag();
+                    Intent intent = new Intent(getActivity(), PersonalProfileActivity.class)
+                            .putExtra(Intent.EXTRA_TEXT, data.getPersonId())
+                            .putExtra(Constants.EXTRA_PERSON_NAME, data.getCastName());
+                    startActivity(intent);
+                }
+            });
             castList.addView(view);
             if (cast.getCastOrder() == 7) {
                 break;
 
             }
-
         }
+
         castList.setVisibility(View.VISIBLE);
     }
 

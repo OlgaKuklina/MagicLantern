@@ -59,7 +59,7 @@
 
     <dimen name="detail_text_view_review_list_item_minSize">60dp</dimen>
     <dimen name="detail_text_view_trailer_list_item_minSize">60dp</dimen>
-
+    <dimen name="personal_profile_movies_list_item_minSize">260dp</dimen>
     <dimen name="detail_text_view_trailer_image_view_layout_width">30dp</dimen>
 
     <dimen name="detail_text_view_trailer_image_view_layout_height">30dp</dimen>
