@@ -3,14 +3,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view_personal_profile"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="com.ok.lab.magiclantern.fragments.PersonalProfileActivityFragment">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@color/textcolorTitler"
         android:orientation="vertical">
@@ -39,13 +39,13 @@
 
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/place_of_birth"
                     style="@style/DetailViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/detail_text_view_movie_date_layout_marginLeft"
                     android:paddingTop="@dimen/detail_text_view_movie_date_paddingTop"
-                    android:text="name"
+                    android:text="Place of birth:"
                     android:textSize="@dimen/detail_text_view_movie_date_text_size" />
 
                 <TextView
@@ -55,40 +55,26 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:text="biography" />
+                    android:text="Biography:" />
 
             </LinearLayout>
         </LinearLayout>
-
         <TextView
             android:layout_width="match_parent"
             style="@style/DetailViewTitle"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:text="starred in movies" />
+            android:text="Starred in movies:" />
 
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="700dp"
-            android:layout_height="420dp"
-            android:padding="10dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pager"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/movie_trailers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </android.support.v4.widget.NestedScrollView>
-    </LinearLayout>
-
+</android.support.v7.widget.RecyclerView>
+</LinearLayout>
 
 </ScrollView>

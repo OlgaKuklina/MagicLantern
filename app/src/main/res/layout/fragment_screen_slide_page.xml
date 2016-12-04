@@ -1,0 +1,33 @@
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/content"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+     android:background="@drawable/touch_effect"
+     android:clickable="true"
+     android:focusable="true"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/movie_name"
+        style="@style/DetailViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="movie_title"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/movie_release_date"
+        style="@style/DetailViewSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="release date" />
+
+    <ImageView
+        android:id="@+id/poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:src="@drawable/no_movie_poster" />
+
+  </LinearLayout>
