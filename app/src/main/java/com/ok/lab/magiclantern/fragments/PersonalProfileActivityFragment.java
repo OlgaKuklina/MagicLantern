@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ok.lab.magiclantern.R;
@@ -58,6 +59,7 @@ public class PersonalProfileActivityFragment extends Fragment {
     private ImageView personalProfImage;
     private TextView placeOfBirth;
     private TextView biography;
+    private LinearLayout popularity;
     private int id;
 
     public PersonalProfileActivityFragment() {
@@ -71,6 +73,7 @@ public class PersonalProfileActivityFragment extends Fragment {
         personalProfImage = (ImageView) v.findViewById(R.id.personal_image);
         placeOfBirth = (TextView) v.findViewById(R.id.place_of_birth);
         biography = (TextView) v.findViewById(R.id.biography);
+        popularity = (LinearLayout) v.findViewById(R.id.stars);
         return v;
     }
 
@@ -88,6 +91,7 @@ public class PersonalProfileActivityFragment extends Fragment {
     }
 
     public void fetchPersonalData(int id) {
+        popularity.removeAllViews();
         this.id = id;
         FetchPersonalProfileTask cTask = new FetchPersonalProfileTask(getResources().getString(R.string.THE_MOVIE_DB_API_TOKEN), POSTER_PERSONAL_IMAGE_BASE_URI);
         cTask.execute(id);
@@ -130,6 +134,12 @@ public class PersonalProfileActivityFragment extends Fragment {
     private void populatePersonalViewData(PersonalProfileDatas personalDatas) {
         placeOfBirth.setText(personalDatas.getPlaceOfBirth());
         biography.setText(personalDatas.getBiography());
+        int stars = personalDatas.getPpopularity();
+        for(int i = 0; i<stars; i++) {
+            View view = getActivity().getLayoutInflater().inflate(R.layout.personal_profile_popularity_item, null);
+            popularity.addView(view);
+        }
+
         Picasso pic = Picasso.with(getActivity());
         Log.v(TAG, "path" + personalDatas.getProfileImagePath());
         if (personalDatas.getProfileImagePath() == null) {
@@ -169,7 +179,7 @@ public class PersonalProfileActivityFragment extends Fragment {
                 try {
 
                     Log.v(TAG, "jObj = " + jObj);
-                    personalDatas = new PersonalProfileDatas(getStringValue(jObj, "name"), baseUri + JsonUtils.getStringValue(jObj, "profile_path"), JsonUtils.getStringValue(jObj, "place_of_birth"), JsonUtils.getStringValue(jObj, "biography"), id);
+                    personalDatas = new PersonalProfileDatas(getStringValue(jObj, "name"), baseUri + JsonUtils.getStringValue(jObj, "profile_path"), JsonUtils.getStringValue(jObj, "place_of_birth"), JsonUtils.getStringValue(jObj, "biography"), id, JsonUtils.getIntValue(jObj, "popularity", 0));
                     populatePersonalViewData(personalDatas);
 
                 } catch (JSONException e) {

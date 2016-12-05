@@ -75,4 +75,7 @@
     <dimen name="detail_anchor_elevation">16dp</dimen>
 
 
+    <dimen name="pp_text_view_paddingBottom">15dp</dimen>
+    <dimen name="pp_text_view_paddingTop">15dp</dimen>
+
 </resources>

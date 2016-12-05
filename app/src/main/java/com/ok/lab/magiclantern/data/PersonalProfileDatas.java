@@ -13,14 +13,15 @@ public class PersonalProfileDatas {
     private String placeOfBirth;
     private String biography;
     private int personId;
+    private int popularity;
 
-
-    public PersonalProfileDatas(String actorName, String profilePath, String placeOfBirth,  String biography, int personId) {
+    public PersonalProfileDatas(String actorName, String profilePath, String placeOfBirth,  String biography, int personId, int popularity) {
         this.actorName = actorName;
         this.profilePath = profilePath;
         this.biography = biography;
         this.personId = personId;
         this.placeOfBirth = placeOfBirth;
+        this.popularity = popularity;
 
     }
     public String getActorName() {
@@ -42,5 +43,10 @@ public class PersonalProfileDatas {
     public String getPlaceOfBirth()
     {
         return placeOfBirth;
+    }
+
+    public int getPpopularity()
+    {
+        return popularity;
     }
 }
