@@ -21,12 +21,19 @@ public class JSONLoader {
     private static final String TAG = JSONLoader.class.getSimpleName();
 
     public static JSONObject load(String relativeUri, String apiKey) {
+        return load(relativeUri,  apiKey, null);
+    }
+    public static JSONObject load(String relativeUri, String apiKey, String appendToResponse) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String movieJsonStr = null;
         try {
-            Uri builtUri = Uri.parse(MOVIE_BASE_URI + relativeUri).buildUpon()
-                    .appendQueryParameter("api_key", apiKey).build();
+            Uri.Builder uriBuilder = Uri.parse(MOVIE_BASE_URI + relativeUri).buildUpon()
+                    .appendQueryParameter("api_key", apiKey);
+            if(appendToResponse!=null) {
+                uriBuilder.appendQueryParameter("append_to_response", appendToResponse);
+            }
+            Uri builtUri = uriBuilder.build();
             URL url = new URL(builtUri.toString());
             Log.v(TAG, "Built URI " + builtUri.toString());
 

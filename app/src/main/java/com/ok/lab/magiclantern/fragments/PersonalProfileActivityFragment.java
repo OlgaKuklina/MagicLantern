@@ -89,14 +89,12 @@ public class PersonalProfileActivityFragment extends Fragment {
             fetchPersonalData(intent.getIntExtra(Intent.EXTRA_TEXT, -1));
         }
     }
-
     public void fetchPersonalData(int id) {
         popularity.removeAllViews();
         this.id = id;
         FetchPersonalProfileTask cTask = new FetchPersonalProfileTask(getResources().getString(R.string.THE_MOVIE_DB_API_TOKEN), POSTER_PERSONAL_IMAGE_BASE_URI);
         cTask.execute(id);
     }
-
 
     public static class PersonalProfileMoviesViewHolder extends RecyclerView.ViewHolder {
 
@@ -122,7 +120,6 @@ public class PersonalProfileActivityFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PersonalProfileMoviesViewHolder holder, int position) {
-
         }
 
         @Override
@@ -168,7 +165,7 @@ public class PersonalProfileActivityFragment extends Fragment {
         @Override
         protected JSONObject doInBackground(Integer... params) {
 
-            JSONObject jObj = JSONLoader.load("/person/" + params[0], apiKey);
+            JSONObject jObj = JSONLoader.load("/person/" + params[0], apiKey, "movie_credits");
             return jObj;
         }
 
