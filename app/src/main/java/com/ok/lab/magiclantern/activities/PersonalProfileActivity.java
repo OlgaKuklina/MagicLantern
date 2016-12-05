@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ok.lab.magiclantern.R;
-import com.ok.lab.magiclantern.fragments.ScreenSlidePageFragment;
 import com.ok.lab.magiclantern.utils.Constants;
 
 public class PersonalProfileActivity extends AppCompatActivity {

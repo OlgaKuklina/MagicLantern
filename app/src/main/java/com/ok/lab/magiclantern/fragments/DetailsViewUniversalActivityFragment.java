@@ -43,6 +43,7 @@ import com.ok.lab.magiclantern.utils.JSONLoader;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.ok.lab.magiclantern.utils.JsonUtils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -70,6 +71,11 @@ import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieC
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_STATUS;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.ok.lab.magiclantern.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
+import static com.ok.lab.magiclantern.utils.JsonUtils.getDoubleValue;
+import static com.ok.lab.magiclantern.utils.JsonUtils.getIntValue;
+import static com.ok.lab.magiclantern.utils.JsonUtils.getListValue;
+import static com.ok.lab.magiclantern.utils.JsonUtils.getStringValue;
+import static com.ok.lab.magiclantern.utils.JsonUtils.getUriValue;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -682,53 +688,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
 
     }
 
-    private String getString(JSONObject jobj, String name) throws JSONException {
-        if (jobj.isNull(name)) {
-            return null;
-        } else {
-            return jobj.getString(name);
-        }
-    }
-
-    private double getDouble(JSONObject jobj, String name, double defaultValue) throws JSONException {
-        if (jobj.isNull(name)) {
-            return defaultValue;
-        } else {
-            return jobj.getDouble(name);
-        }
-    }
-
-    private int getInt(JSONObject jobj, String name, int defaultValue) throws JSONException {
-        if (jobj.isNull(name)) {
-            return defaultValue;
-        } else {
-            return jobj.getInt(name);
-        }
-    }
-
-    private List<String> getList(JSONObject jobj, String name) throws JSONException {
-        if (jobj.isNull(name)) {
-            return Collections.emptyList();
-        } else {
-            JSONArray jArray = jobj.getJSONArray(name);
-            List<String> results = new ArrayList<>(jArray.length());
-            for (int i = 0; i < jArray.length(); i++) {
-                JSONObject Jobject = jArray.getJSONObject(i);
-                results.add(Jobject.getString("name"));
-            }
-            return results;
-        }
-    }
-
-
-    private String getUri(JSONObject jobj, String name) throws JSONException {
-        if (jobj.isNull(name)) {
-            return null;
-        } else {
-            return IMDB_URI + jobj.getString("imdb_id");
-        }
-    }
-
     public List<TrailerData> getTrailerData() {
         return trailerData;
     }
@@ -748,7 +707,7 @@ public class DetailsViewUniversalActivityFragment extends Fragment
             if (jObj != null) {
                 try {
 
-                    detailDatas = new MovieDataContainer(getString(jObj, "poster_path"), id, getString(jObj, "title"), getString(jObj, "overview"), getString(jObj, "release_date"), getInt(jObj, "runtime", 0), getDouble(jObj, "vote_average", 0.0), getString(jObj, "backdrop_path"), getString(jObj, "original_language"), getList(jObj, "production_countries"), getList(jObj, "genres"), getString(jObj, "status"), getUri(jObj, "imdb_uri"), getList(jObj, "production_companies"));
+                    detailDatas = new MovieDataContainer(getStringValue(jObj, "poster_path"), id, getStringValue(jObj, "title"), getStringValue(jObj, "overview"), getStringValue(jObj, "release_date"), getIntValue(jObj, "runtime", 0), getDoubleValue(jObj, "vote_average", 0.0), getStringValue(jObj, "backdrop_path"), getStringValue(jObj, "original_language"), getListValue(jObj, "production_countries"), getListValue(jObj, "genres"), getStringValue(jObj, "status"), getUriValue(jObj, "imdb_uri" + IMDB_URI), getListValue(jObj, "production_companies"));
                     populateDetailsViewData(detailDatas);
 
                 } catch (JSONException e) {
@@ -857,7 +816,6 @@ public class DetailsViewUniversalActivityFragment extends Fragment
                 }
                 populateCastList(castData);
             }
-
         }
     }
 
