@@ -1,8 +1,8 @@
-# ![icon](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png)  MagicLantern
+# ![magiclanternicon](https://user-images.githubusercontent.com/6971421/28014941-d8af27bc-6522-11e7-9a91-8ce18ab02a99.png)  MagicLantern
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba7ecbe8c824a0b8f6479248d3499fa)](https://www.codacy.com/app/OlgaKuklina/MagicLantern?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlgaKuklina/MagicLantern&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/OlgaKuklina/MagicLantern.svg?branch=master)](https://travis-ci.org/OlgaKuklina/MagicLantern)
 
 
-[![Untitled 4.png](https://s15.postimg.org/qv0uoj58r/Untitled_4.png)](https://postimg.org/image/46bnoynuv/)
+![untitled_4](https://user-images.githubusercontent.com/6971421/28015583-6a8e4346-6525-11e7-9459-89a7507e476b.png)
 
 
 Overview
