@@ -2,7 +2,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba7ecbe8c824a0b8f6479248d3499fa)](https://www.codacy.com/app/OlgaKuklina/MagicLantern?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlgaKuklina/MagicLantern&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/OlgaKuklina/MagicLantern.svg?branch=master)](https://travis-ci.org/OlgaKuklina/MagicLantern)
 
 
-![untitled_4](https://user-images.githubusercontent.com/6971421/28015583-6a8e4346-6525-11e7-9459-89a7507e476b.png)
+![mli2](https://user-images.githubusercontent.com/6971421/28016528-9a0bd76a-6529-11e7-97e7-6459a047f9b9.png)
 
 
 Overview
