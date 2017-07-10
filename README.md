@@ -1,9 +1,14 @@
 MagicLantern 
 ======
 
-![top_banner](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png)
+![top_banner](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png) 
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba7ecbe8c824a0b8f6479248d3499fa)](https://www.codacy.com/app/OlgaKuklina/MagicLantern?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlgaKuklina/MagicLantern&amp;utm_campaign=Badge_Grade)
+
+
 
 [![Untitled 4.png](https://s15.postimg.org/qv0uoj58r/Untitled_4.png)](https://postimg.org/image/46bnoynuv/)
+
 
 Overview
 ======
