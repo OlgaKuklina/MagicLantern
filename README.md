@@ -1,6 +1,4 @@
-
 # ![icon](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png)  MagicLantern
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba7ecbe8c824a0b8f6479248d3499fa)](https://www.codacy.com/app/OlgaKuklina/MagicLantern?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlgaKuklina/MagicLantern&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/OlgaKuklina/MagicLantern.svg?branch=master)](https://travis-ci.org/OlgaKuklina/MagicLantern)
 
 
@@ -9,6 +7,7 @@
 
 Overview
 ======
+
 MagicLantern is an application designed as a projector in the cinema industry. Take an adventure discovering the collection of movies, production details and audience reviews.
 
 
@@ -16,19 +15,20 @@ The magic lantern [laterna magica] is an early type of image projector. It is no
 
 Explore and search
 ======
-* Enjoy a variety of movie trailers 
 
-* Movie detail info and user reviews 
+- Enjoy a variety of movie trailers 
 
-* Celebrities, actors, actresses
+- Movie detail info and user reviews 
 
-* Movies sorted in order to support different categories
+- Celebrities, actors, actresses
 
-* Lists of upcoming, top-rated and most popular movies
+- Movies sorted in order to support different categories
 
-* Maintain your “Favorite” list
+- Lists of upcoming, top-rated and most popular movies
 
-* Share movie trailers and movie details
+- Maintain your “Favorite” list
+
+- Share movie trailers and movie details
 
 Getting Started
 ======
@@ -38,10 +38,10 @@ MagicLantern min API Level: 21, Android 5.0 (LOLLIPOP)
 
 Used libraries
 ======
-* Android Design Support Library
-* Android Support Library v7
-* YouTube Android Player API
-* Picasso Library
+- Android Design Support Library
+- Android Support Library v7
+- YouTube Android Player API
+- Picasso for loading and rendering images.
 
 The app uses TMDb API and content for posters and movie information.
 
