@@ -1,7 +1,5 @@
-MagicLantern 
-======
 
-![top_banner](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png) 
+# ![icon](https://s25.postimg.org/ab9en0we7/Font_Awesome_f13d_0_128.png)  MagicLantern
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fba7ecbe8c824a0b8f6479248d3499fa)](https://www.codacy.com/app/OlgaKuklina/MagicLantern?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlgaKuklina/MagicLantern&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/OlgaKuklina/MagicLantern.svg?branch=master)](https://travis-ci.org/OlgaKuklina/MagicLantern)
 
