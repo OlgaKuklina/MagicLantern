@@ -5,8 +5,8 @@ android:
     # Update Android SDK Tools
     - tools
 
-    - build-tools-24.0.0
-    - android-24
+    - build-tools-23.0.1
+    - android-23
 
     # Support library
     - extra-android-support
